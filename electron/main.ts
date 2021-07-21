@@ -25,6 +25,7 @@ function createWindow () {
   })
 
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
+  mainWindow.setOpacity(0.9);
 
   mainWindow.on('closed', () => {
     mainWindow = null
