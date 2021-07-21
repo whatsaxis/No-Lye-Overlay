@@ -1,6 +1,14 @@
 import { createGlobalStyle } from 'styled-components'
 
+import MinecraftWoff from '../../assets/fonts/Minecraft.woff'
+// import MinecraftWoff2 from '../../assets/fonts/Minecraft.woff2'
+
 export const GlobalStyle = createGlobalStyle`
+  @font-face {
+    font-family: Minecraft;
+    src: url(${MinecraftWoff}) format('woff');
+  }
+
   * {
     margin: 0;
     padding: 0;
@@ -8,8 +16,8 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Minecraft, Arial, Helvetica, sans-serif;
     font-size: 16px;
-    color: #E1E1E6;
+    background-color: #191621;
   }
 `

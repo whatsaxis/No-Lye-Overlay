@@ -19,5 +19,9 @@ module.exports = [
     use: {
       loader: 'babel-loader'
     }
+  },
+  {
+    test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+    use: ['url-loader']
   }
 ]

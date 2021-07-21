@@ -4,6 +4,6 @@ module.exports = {
   },
   entry: './electron/main.ts',
   module: {
-    rules: require('./rules.webpack'),
+    rules: require('./rules.webpack')
   }
 }
