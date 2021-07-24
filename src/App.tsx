@@ -7,10 +7,8 @@ export function App() {
   return (
     <>
       <GlobalStyle />
-      <Taskbar />
-      <Sidebar>
-
-      </Sidebar>
+      {/* <Taskbar /> */}
+      <Sidebar />
     </>
   )
 }

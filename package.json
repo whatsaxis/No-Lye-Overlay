@@ -46,8 +46,10 @@
     "@typescript-eslint/eslint-plugin": "4.27.0",
     "@typescript-eslint/parser": "4.27.0",
     "babel-loader": "8.2.2",
+    "copy-webpack-plugin": "^9.0.1",
     "cross-env": "7.0.3",
     "electron": "13.1.2",
+    "electron-devtools-installer": "^3.2.0",
     "eslint": "7.29.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-config-standard": "16.0.3",
@@ -68,8 +70,8 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "name": "Electron starter",
-        "executableName": "electron-starter",
+        "name": "Tokyo Overlay",
+        "executableName": "tokyo-overlay",
         "icon": "assets/icon",
         "extraResource": [
           "assets"

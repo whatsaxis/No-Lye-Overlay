@@ -1,4 +1,4 @@
-import { TaskbarStyles, TaskbarStatic, TaskbarControl } from './styles';
+import { TaskbarStyles, TaskbarStatic, TaskbarControl } from './styles'
 
 const Taskbar: React.FC = () => {
     return (

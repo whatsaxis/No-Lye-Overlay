@@ -1,8 +1,7 @@
 import styled from 'styled-components'
 
 
-// TODO
-// #191621
+// NOTE: #191621 sexy AF background color
 
 export const TaskbarStyles = styled.div`
     font-family: Minecraft;
@@ -19,8 +18,8 @@ export const TaskbarStatic = styled.div`
 
 export const TaskbarControl = styled.button`
     -webkit-app-region: no-drag;
-    border: 0;
-    background-color: transparent;
+    border: mone;
+    background: none;
     float: right;
     padding-right: 0.5rem;
 `

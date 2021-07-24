@@ -3,34 +3,33 @@ import Skywars from '../Skywars'
 import Duels from '../Duels'
 import Settings from '../Settings'
 
+import BedwarsIcon from '../../../assets/images/Sidebar/bedwars.png'
+import SkywarsIcon from '../../../assets/images/Sidebar/skywars.png'
+import DuelsIcon from '../../../assets/images/Sidebar/duels.png'
+import SettingsIcon from '../../../assets/images/Sidebar/settings.png'
 
-const ASSETS_FOLDER = "../../../assets";
 
 const routes = [
     {
         "name": "Bedwars",
-        "icon": "%ASSETS_FOLDER%/images/bedwars_512x.png",
+        "icon": BedwarsIcon,
         "component": <Bedwars />
     },
     {
         "name": "Skywars",
-        "icon": "%ASSETS_FOLDER%/images/skywars_512x.png",
+        "icon": SkywarsIcon,
         "component": <Skywars />
     },
     {
         "name": "Duels",
-        "icon": "%ASSETS_FOLDER%/images/duels_512x.png",
+        "icon": DuelsIcon,
         "component": <Duels />
     },
     {
         "name": "Settings",
-        "icon": "%ASSETS_FOLDER%/images/settings_512x.png",
+        "icon": SettingsIcon,
         "component": <Settings />
     },
 ]
-
-routes.forEach((p, i) => {
-    routes[i].icon = routes[i].icon.replace("%ASSETS_FOLDER%", ASSETS_FOLDER)
-}, routes)
 
 export default routes;

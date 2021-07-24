@@ -22,4 +22,9 @@ export const GlobalStyle = createGlobalStyle`
     background-color: #191621;
     opacity: 0.5;
   }
+
+  button.clicky {
+    background: none;
+    border: none;
+  }
 `
