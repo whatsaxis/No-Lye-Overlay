@@ -31,17 +31,22 @@ export const SidebarStyles = styled.nav`
 export const SidebarToggle = styled.img`
     & {
         background-image: url('images/menu_toggle.png') no-repeat;
-        margin-bottom: 0.45rem;
+        margin-bottom: 0.2rem;
     }
 
     &:hover {
-        background-image: url('../../assets/images/Sidebar/menu_toggle_hover.png') no-repeat;
+        background-image: url('images/skywars.png') no-repeat;
     }
 `
 
 // https://stackoverflow.com/questions/13596821/css-align-images-and-text-on-same-line
 // holy crap thank this answer so much ^
 export const SidebarRoute = styled.li`
+    & {
+        width: 100%;
+        padding: 0.15rem;
+    }
+
     & * {
         display: inline;
     }

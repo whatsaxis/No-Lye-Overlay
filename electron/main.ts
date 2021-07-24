@@ -42,6 +42,27 @@ async function registerListeners () {
   ipcMain.on('message', (_, message) => {
     console.log(message)
   })
+
+
+  // Window Control API
+
+  ipcMain.on('close-window', (_) => {
+    if (mainWindow) mainWindow.close();
+  })
+
+  ipcMain.on('reframe-window', (_) => {
+    if (!mainWindow) return;
+
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize()
+    } else {
+      mainWindow.maximize()
+    }
+  })
+  
+  ipcMain.on('minimize-window', (_) => {
+    if (mainWindow) mainWindow.minimize();
+  })
 }
 
 function installReactDevTools () {

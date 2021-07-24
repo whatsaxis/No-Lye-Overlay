@@ -3,6 +3,9 @@ import { createGlobalStyle } from 'styled-components'
 import MinecraftWoff from '../../assets/fonts/Minecraft.woff'
 import MinecraftWoff2 from '../../assets/fonts/Minecraft.woff2'
 
+// For future use
+// #353535
+
 export const GlobalStyle = createGlobalStyle`
   @font-face {
     font-family: Minecraft;
@@ -27,5 +30,14 @@ export const GlobalStyle = createGlobalStyle`
   button.clicky {
     background: none;
     border: none;
+  }
+
+  img {
+    user-drag: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
   }
 `

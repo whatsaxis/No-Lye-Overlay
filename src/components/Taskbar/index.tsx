@@ -1,20 +1,33 @@
-import { TaskbarStyles, TaskbarStatic, TaskbarControl } from './styles'
+import { TaskbarStyles, TaskbarTitle, TaskbarControl } from './styles'
 
 import CloseIcon from '../../../assets/images/Taskbar/close.svg'
-import WindowIcon from '../../../assets/images/Taskbar/window.svg'
+import ReframeIcon from '../../../assets/images/Taskbar/reframe.svg'
 import MinimizeIcon from '../../../assets/images/Taskbar/minimize.svg'
+
+
+// https://stackoverflow.com/questions/56203211/is-there-any-other-way-to-close-a-frameless-window-in-electron-5-0-1
+// Most useful answer ever!
+
+const handleClose = () => {
+    window.Main.closeWindow()
+}
+
+const handleReframe = () => {
+    window.Main.reframeWindow()
+}
+
+const handleMinimize = () => {
+    window.Main.minimizeWindow()
+}
 
 const Taskbar: React.FC = () => {
     return (
         <TaskbarStyles>
-            <TaskbarStatic>
+            <TaskbarTitle>Tokyo Overlay</TaskbarTitle>
 
-                <h3>Tokyo Overlay</h3>
-
-            </TaskbarStatic>
-            <TaskbarControl><img src={ CloseIcon } /></TaskbarControl>
-            <TaskbarControl><img src={ WindowIcon } /></TaskbarControl>
-            <TaskbarControl><img src={ MinimizeIcon } /></TaskbarControl>
+            <TaskbarControl onClick={ handleClose }><img src={ CloseIcon } /></TaskbarControl>
+            <TaskbarControl onClick={ handleReframe }><img src={ ReframeIcon } /></TaskbarControl>
+            <TaskbarControl onClick={ handleMinimize }><img src={ MinimizeIcon } /></TaskbarControl>
         </TaskbarStyles>
     );
 }

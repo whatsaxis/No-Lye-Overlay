@@ -6,11 +6,21 @@ export const api = {
    * so they can interact with the main (electron) side
    * without security problems.
    *
-   * The function below can accessed using `window.Main.sayHello`
+   * The API can accessed using `window.Main._____`
    */
 
-  sendMessage: (message: string) => { 
-    ipcRenderer.send('message', message)
+  // Window Control API
+
+  closeWindow: () => {
+    ipcRenderer.send('close-window')
+  },
+
+  reframeWindow: () => {
+    ipcRenderer.send('reframe-window')
+  },
+  
+  minimizeWindow: () => {
+    ipcRenderer.send('minimize-window')
   },
 
   /**
