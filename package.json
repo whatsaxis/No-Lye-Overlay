@@ -35,7 +35,6 @@
     "@electron-forge/maker-squirrel": "6.0.0-beta.57",
     "@electron-forge/maker-zip": "6.0.0-beta.57",
     "@electron-forge/plugin-webpack": "6.0.0-beta.57",
-    "@marshallofsound/webpack-asset-relocator-loader": "0.5.0",
     "@testing-library/jest-dom": "5.14.1",
     "@testing-library/react": "11.2.7",
     "@types/electron-devtools-installer": "2.2.0",
@@ -102,7 +101,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "Electron Starter"
+            "name": "Tokyo Overlay"
           }
         },
         {

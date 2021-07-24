@@ -17,9 +17,16 @@ export const TaskbarStatic = styled.div`
 `
 
 export const TaskbarControl = styled.button`
-    -webkit-app-region: no-drag;
-    border: mone;
-    background: none;
-    float: right;
-    padding-right: 0.5rem;
+    & {
+        float: right;
+        padding-right: 0.5rem;
+        border: none;
+        background: none;
+        top: -4px;
+        cursor: pointer;
+        width: 28px;
+        height: 22px;
+        pointer-events: auto;
+        -webkit-app-region: no-drag;
+    }
 `

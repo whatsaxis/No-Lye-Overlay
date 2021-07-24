@@ -21,6 +21,7 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 16px;
     background-color: #191621;
     opacity: 0.5;
+    overflow: hidden;
   }
 
   button.clicky {

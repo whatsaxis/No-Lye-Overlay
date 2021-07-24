@@ -3,16 +3,20 @@ module.exports = [
     test: /\.node$/,
     use: 'node-loader',
   },
-  {
-    test: /\.(m?js|node)$/,
-    parser: { amd: false },
-    use: {
-      loader: '@marshallofsound/webpack-asset-relocator-loader',
-      options: {
-        outputAssetBase: 'native_modules',
-      },
-    },
-  },
+  /*
+    I may of done a bit of an oopsie. Keep this just in case.
+    https://www.npmjs.com/package/@marshallofsound/webpack-asset-relocator-loader
+  */
+  // {
+  //   test: /\.(m?js|node)$/,
+  //   parser: { amd: false },
+  //   use: {
+  //     loader: '@marshallofsound/webpack-asset-relocator-loader',
+  //     options: {
+  //       outputAssetBase: 'native_modules',
+  //     },
+  //   },
+  // },
   {
     test: /\.(js|ts|tsx)$/,
     exclude: /node_modules/,

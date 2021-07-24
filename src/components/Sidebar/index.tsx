@@ -16,7 +16,7 @@ const Sidebar: React.FC = () => {
         >
                 <div className="inline-children">
                     <button onClick={ () => setToggled(!toggled) } className="clicky"><SidebarToggle src={ MenuToggleIcon } height="26px"/></button>
-                    { toggled && <h3>Tokyo Overlay</h3> }
+                    { toggled && <h3>Gamemodes</h3> }
                 </div>
                 <ul>
                 { toggled && 
