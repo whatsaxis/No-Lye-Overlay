@@ -1,6 +1,10 @@
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';  // Remove in production
 import { app, BrowserWindow, ipcMain } from 'electron'
 
+const path = require('path');
+const fs = require('fs');
+
+
 let mainWindow: BrowserWindow | null
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
@@ -13,12 +17,12 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
 
 function createWindow () {
   mainWindow = new BrowserWindow({
-    // icon: path.join(assetsPath, 'assets', 'icon.png'),
+    icon: path.join(__dirname, 'assets', 'icon.png'),  // TODO fix this
     width: 1100,
     height: 700,
     minWidth: 800,
     minHeight: 400,
-    backgroundColor: '#191622',
+    // backgroundColor: '#191622',
     frame: false,
     webPreferences: {
       nodeIntegration: false,

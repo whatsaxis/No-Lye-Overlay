@@ -5,6 +5,7 @@ import MinecraftWoff2 from '../../assets/fonts/Minecraft.woff2'
 
 // For future use
 // #353535
+// #191621
 
 export const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -13,18 +14,39 @@ export const GlobalStyle = createGlobalStyle`
     url(${MinecraftWoff}) format('woff');
   }
 
+  :root {
+    --theme-color: #03030F;
+    --secondary-color: #3e424b;
+  }
+
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    outline: none;
   }
 
   body {
     font-family: Minecraft, Arial, Helvetica, sans-serif;
     font-size: 16px;
-    background-color: #191621;
+    background-color: var(--theme-color);
     opacity: 0.6;
     overflow: hidden;
+  }
+
+  p, h1, h2, h3, h4, h5, h6, li, label, div, img, br {
+    user-drag: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -webkit-app-region: no-drag;
+    cursor: default;
   }
 
   button.clicky {
@@ -32,13 +54,21 @@ export const GlobalStyle = createGlobalStyle`
     border: none;
   }
 
-  img {
-    user-drag: none;
-    -webkit-user-drag: none;
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
+  input, select {
+    font-family: Minecraft, Arial, Helvetica, sans-serif;
+  }
+
+  // .inline-children {
+  //   text-align: center;
+  // }
+
+  // .inline-children > * {
+  //     display: inline-block;
+  //     vertical-align: middle;
+  // }
+
+  .inline-children > * {
+      display: inline;
   }
 `
 

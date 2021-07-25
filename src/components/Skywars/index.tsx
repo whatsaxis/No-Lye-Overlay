@@ -9,6 +9,7 @@ const Skywars: React.FC<Props> = () => {
         <SkywarsStyles>
 
             <h1>Skywars Overlay</h1>
+            <p>This module is still in maintenence! 🚧</p>
             
         </SkywarsStyles>
     );
