@@ -1,14 +1,17 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 
 import { SidebarStyles, SidebarToggle, SidebarRoute } from './styles'
 
 import routes from './routes'
+
+import { OverlayContext } from "../../App"
 
 import MenuToggleIcon from '../../../assets/images/Sidebar/menu_toggle.png'
 import MenuToggleIconHover from '../../../assets/images/Sidebar/menu_toggle_hover.png'
  
 const Sidebar: React.FC = () => {
     const [toggled, setToggled] = useState(true);
+    const context = useContext(OverlayContext);
 
     return (
         <SidebarStyles
@@ -23,7 +26,7 @@ const Sidebar: React.FC = () => {
                     <ul>
                         <>
                             { routes.map(route => 
-                                <SidebarRoute key={ route.name }><img src={ route.icon } height="18px" />{ route.name }</SidebarRoute>)
+                                <SidebarRoute key={ route.name } onClick={ () => context[1](route) }><img src={ route.icon } height="18px" />{ route.name }</SidebarRoute>)
                             }
                         </>
                     </ul>

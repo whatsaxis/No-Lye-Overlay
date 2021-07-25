@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
 
 import MinecraftWoff from '../../assets/fonts/Minecraft.woff'
 import MinecraftWoff2 from '../../assets/fonts/Minecraft.woff2'
@@ -23,7 +23,7 @@ export const GlobalStyle = createGlobalStyle`
     font-family: Minecraft, Arial, Helvetica, sans-serif;
     font-size: 16px;
     background-color: #191621;
-    opacity: 0.5;
+    opacity: 0.6;
     overflow: hidden;
   }
 
@@ -39,5 +39,15 @@ export const GlobalStyle = createGlobalStyle`
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
+  }
+`
+
+export const Wrapper = styled.div`
+  & {
+    display: flex;
+  }
+
+  & > div {
+    width: 100%;
   }
 `

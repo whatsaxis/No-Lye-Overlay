@@ -9,7 +9,13 @@ import DuelsIcon from '../../../assets/images/Sidebar/duels.png'
 import SettingsIcon from '../../../assets/images/Sidebar/settings.png'
 
 
-const routes = [
+export interface Route {
+    name: string
+    icon: string,  // yikes Typescript
+    component: JSX.Element
+}
+
+const routes: Route[] = [
     {
         "name": "Bedwars",
         "icon": BedwarsIcon,
