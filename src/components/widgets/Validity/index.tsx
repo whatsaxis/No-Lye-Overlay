@@ -1,26 +1,57 @@
-import { Valid, Invalid } from './styles'
+import React from 'react';
+
+import { Valid, Invalid, Hidden } from './styles'
 
 import ValidIcon from '../../../../assets/images/Validity/valid.svg'
 import InvalidIcon from '../../../../assets/images/Validity/invalid.svg'
 
-export interface Props {
-    valid: boolean
-}
- 
-const Validity: React.FC<Props> = (props) => {
-    let image = <img src={ InvalidIcon } />
-    let text = <p>Invalid</p>
 
-    if (props.valid) {
-        image = <img src={ ValidIcon } />;
-        text = <p>Valid</p>
+type State = { 
+    valid: boolean,
+    hidden: boolean
+}
+class Validity extends React.Component<{}, State> {
+    constructor(props: {}) {
+        super(props)
+        this.state = { valid: false, hidden: true }
     }
 
-    return (
-        <div className="validity">
-            { props.valid ? <Valid>{ image } { text }</Valid> : <Invalid>{ image } { text }</Invalid> }
-        </div>
-    );
+    render() {
+        return (
+            <div className="validity">
+                { this.state.hidden ? 
+                    <Hidden>
+                        {
+                            this.state.valid ?
+                                <Valid><img src={ ValidIcon } /><p>Valid</p></Valid> :
+                                <Invalid><img src={ InvalidIcon } /><p>Invalid</p></Invalid>
+                        }
+                    </Hidden>
+                    :
+                    <>
+                        {
+                            this.state.valid ?
+                                <Valid><img src={ ValidIcon } /><p>Valid</p></Valid> :
+                                <Invalid><img src={ InvalidIcon } /><p>Invalid</p></Invalid>
+                        }
+                    </>
+                }
+                
+            </div>
+        )
+    }
+
+    setValid(value: boolean) {
+        this.setState({ valid: value })
+    }
+
+    hide() {
+        this.setState({ hidden: true })
+    }
+
+    show() {
+        this.setState({ hidden: false })
+    }
 }
  
 export default Validity;

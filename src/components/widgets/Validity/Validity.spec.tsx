@@ -3,16 +3,16 @@ import { render } from '@testing-library/react'
 import Validity from './index';
 
 
-test('Taskbar should render with valid prop set to true', () => {
-    const { getByText, getByAltText } = render(<Validity valid={ true } />)
+test('Validity should render with valid prop set to true', () => {
+    const { getByText, getByAltText } = render(<Validity />)
 
     expect(
         getByText("Valid")
     ).toBeTruthy()
 })
 
-test('Taskbar should render with valid prop set to false', () => {
-    const { getByText, getByAltText } = render(<Validity valid={ false } />)
+test('Validity should render with valid prop set to false', () => {
+    const { getByText, getByAltText } = render(<Validity />)
 
     expect(
         getByText("Invalid")

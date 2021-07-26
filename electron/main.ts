@@ -1,8 +1,21 @@
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';  // Remove in production
 import { app, BrowserWindow, ipcMain } from 'electron'
 
-const path = require('path');
-const fs = require('fs');
+import { Installation } from './settings'
+
+/*
+File stuff
+*/
+
+const path = require('path')
+const fs = require('fs')
+const os = require('os')
+
+
+const logsPath = path.join(require("minecraft-folder-path"), "logs")
+
+const folderPath = path.join(os.homedir(), "/duels_overlay")
+const configPath = path.join(folderPath, "config.json")
 
 
 let mainWindow: BrowserWindow | null
@@ -50,11 +63,11 @@ async function registerListeners () {
 
   // Window Control API
 
-  ipcMain.on('close-window', (_) => {
+  ipcMain.on('close-window', (event) => {
     if (mainWindow) mainWindow.close();
   })
 
-  ipcMain.on('reframe-window', (_) => {
+  ipcMain.on('reframe-window', (event) => {
     if (!mainWindow) return;
 
     if (mainWindow.isMaximized()) {
@@ -64,8 +77,34 @@ async function registerListeners () {
     }
   })
   
-  ipcMain.on('minimize-window', (_) => {
+  ipcMain.on('minimize-window', (event) => {
     if (mainWindow) mainWindow.minimize();
+  })
+
+  // Settings API
+
+  ipcMain.on('set-setting', (event, data) => {
+    console.log(data)
+  })
+
+  ipcMain.on('check-game-dir', (event, installation: Installation) => {
+    if (installation === 'vanilla') {
+      fs.access(logsPath.replaceAll("\\", "/"), (err: Error) => {
+        event.reply( 'check-game-dir-reply', err ? false : true )
+      })
+    } else if (installation === 'lunar') {
+      fs.access(path.join(os.homedir(), "/.lunarclient/offline/1.8/logs").replaceAll("\\", "/"), (err: Error) => {
+        event.reply( 'check-game-dir-reply', err ? false : true )
+      })
+    } else if (installation === 'badlion') {
+      fs.access(path.join(logsPath, "blclient/minecraft").replaceAll("\\", "/"), (err: Error) => {
+        event.reply( 'check-game-dir-reply', err ? false : true )
+      })
+    } else if (installation === 'pvplounge') {
+      fs.access(path.join(logsPath, "../../.pvplounge/logs").replaceAll("\\", "/"), (err: Error) => {
+        event.reply( 'check-game-dir-reply', err ? false : true )
+      })
+    }
   })
 }
 
