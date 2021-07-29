@@ -4,18 +4,6 @@ import styled from 'styled-components'
 // TODO
 
 export const SettingsStyles = styled.div`
-  div.setting {
-      
-  }
-
-  div.setting:hover {
-      
-  }
-
-  div.setting label {
-      
-  }
-
   input[type=text], select, div.validity {
       font-size: 0.95rem;
       float: right;
@@ -23,15 +11,6 @@ export const SettingsStyles = styled.div`
 
   input[type=text] {
       width: 50%;
-      color: #fff;
-      border: 2px solid #fff;
-      background-color: #000;
-  }
-
-  select {
-      color: #fff;
-      background-color: #000;
-      border: 2px solid #fff;
   }
 
   input[type=text]:hover, select:hover {

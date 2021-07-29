@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 
-import { Installation } from './settings'
+import { Installation } from './constants'
 
 
 export const api = {
@@ -32,10 +32,15 @@ export const api = {
     ipcRenderer.send('set-setting', { setting: setting, value: value })
   },
 
-  checkGameDirectory: async (installation: Installation) => {
-      // For future reference:
-      // https://betterprogramming.pub/how-to-return-a-response-from-asynchronous-calls-in-javascript-d20e6f49651b
+  getSetting: (setting: string) => {
+    // For future reference:
+    // https://betterprogramming.pub/how-to-return-a-response-from-asynchronous-calls-in-javascript-d20e6f49651b
 
+    let response = ipcRenderer.sendSync('get-setting', setting)
+    return response
+  },
+
+  checkGameDirectory: async (installation: Installation) => {
       ipcRenderer.send('check-game-dir', installation)
 
       let response
@@ -51,6 +56,24 @@ export const api = {
       response = await awaitResponse()
 
       return response
+  },
+
+  getLogsDirectoryFromInstallation: async (installation: Installation) => {
+    ipcRenderer.send('get-game-dir', installation)
+
+    let response
+
+    async function awaitResponse() {
+      return new Promise((resolve, reject) => {
+        ipcRenderer.once('get-game-dir-reply', (event, data) => {
+          resolve(data)
+        })
+      })
+    }
+
+    response = await awaitResponse()
+
+    return response
   },
 
   /**

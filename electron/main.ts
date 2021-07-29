@@ -1,22 +1,45 @@
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';  // Remove in production
 import { app, BrowserWindow, ipcMain } from 'electron'
 
-import { Installation } from './settings'
+import { Installation } from './constants'
 
-/*
-File stuff
-*/
+const Store = require('electron-store');
 
 const path = require('path')
 const fs = require('fs')
 const os = require('os')
 
 
+/*
+File stuff
+*/
+
 const logsPath = path.join(require("minecraft-folder-path"), "logs")
 
-const folderPath = path.join(os.homedir(), "/duels_overlay")
-const configPath = path.join(folderPath, "config.json")
+const schema = {
+  username: {
+    type: 'string',
+    default: ''
+  },
+  client: {
+    type: 'string',
+    default: 'vanilla'
+  },
+  logs_dir: {
+    type: 'string',
+    default: logsPath
+  },
+  api_key: {
+    type: 'string',
+    default: ''
+  }
+}
 
+const storage = new Store({ schema });
+
+/*
+Electron Initialization
+*/
 
 let mainWindow: BrowserWindow | null
 
@@ -35,7 +58,6 @@ function createWindow () {
     height: 700,
     minWidth: 800,
     minHeight: 400,
-    // backgroundColor: '#191622',
     frame: false,
     webPreferences: {
       nodeIntegration: false,
@@ -53,14 +75,6 @@ function createWindow () {
 }
 
 async function registerListeners () {
-  /**
-   * This comes from bridge integration, check bridge.ts
-   */
-  ipcMain.on('message', (_, message) => {
-    console.log(message)
-  })
-
-
   // Window Control API
 
   ipcMain.on('close-window', (event) => {
@@ -84,7 +98,11 @@ async function registerListeners () {
   // Settings API
 
   ipcMain.on('set-setting', (event, data) => {
-    console.log(data)
+    storage.set(data.setting, data.value)
+  })
+
+  ipcMain.on('get-setting', (event, setting: string) => {
+    event.returnValue = storage.get(setting)
   })
 
   ipcMain.on('check-game-dir', (event, installation: Installation) => {
@@ -105,6 +123,13 @@ async function registerListeners () {
         event.reply( 'check-game-dir-reply', err ? false : true )
       })
     }
+  })
+
+  ipcMain.on('get-game-dir', (event, installation: Installation) => {
+    if (installation === 'vanilla')   event.reply( 'get-game-dir-reply', logsPath.replaceAll("\\", "/") )
+    if (installation === 'lunar')     event.reply( 'get-game-dir-reply', path.join(os.homedir(), "/.lunarclient/offline/1.8/logs").replaceAll("\\", "/") )
+    if (installation === 'badlion')   event.reply( 'get-game-dir-reply', path.join(logsPath, "blclient/minecraft").replaceAll("\\", "/") )
+    if (installation === 'pvplounge') event.reply( 'get-game-dir-reply', path.join(logsPath, "../../.pvplounge/logs").replaceAll("\\", "/") )
   })
 }
 

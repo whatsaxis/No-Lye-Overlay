@@ -55,7 +55,10 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   input, select {
+    color: #fff;
+    background-color: #000;
     font-family: Minecraft, Arial, Helvetica, sans-serif;
+    border: 2px solid #fff;
   }
 
   // .inline-children {
