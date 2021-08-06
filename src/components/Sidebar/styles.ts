@@ -5,7 +5,7 @@ export const SidebarStyles = styled.nav`
     & {
         display: inline-block;
         // background-color: #fff;
-        background-color: var(--primary-color);
+        background-color: var(--secondary-color);
         height: 100vw;
         padding: 0.4rem;
     }

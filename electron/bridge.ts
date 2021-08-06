@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron'
 
-import { Installation } from './constants'
+
+import { Installation } from './settings'
 
 
 export const api = {
@@ -41,6 +42,9 @@ export const api = {
   },
 
   checkGameDirectory: async (installation: Installation) => {
+      // For future reference:
+      // https://betterprogramming.pub/how-to-return-a-response-from-asynchronous-calls-in-javascript-d20e6f49651b
+
       ipcRenderer.send('check-game-dir', installation)
 
       let response
@@ -58,30 +62,14 @@ export const api = {
       return response
   },
 
-  getLogsDirectoryFromInstallation: async (installation: Installation) => {
-    ipcRenderer.send('get-game-dir', installation)
-
-    let response
-
-    async function awaitResponse() {
-      return new Promise((resolve, reject) => {
-        ipcRenderer.once('get-game-dir-reply', (event, data) => {
-          resolve(data)
-        })
-      })
-    }
-
-    response = await awaitResponse()
-
-    return response
-  },
-
   /**
    * Provide an easier way to listen to events
    */
   on: (channel: string, callback: Function) => {
-    ipcRenderer.on(channel, (_, data) => callback(data))
+    ipcRenderer.on(channel, (_: Electron.IpcRendererEvent, data: any) => callback(_, data))
   },
 }
+
+
 
 contextBridge.exposeInMainWorld('Main', api)
