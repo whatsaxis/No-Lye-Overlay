@@ -8,7 +8,7 @@ import InvalidIcon from '../../../../assets/images/Validity/invalid.svg'
 
 type State = { 
     valid: boolean,
-    hidden: boolean
+    hidden: boolean,
 }
 class Validity extends React.Component<{}, State> {
     constructor(props: {}) {

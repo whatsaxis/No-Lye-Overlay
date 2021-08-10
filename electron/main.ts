@@ -43,11 +43,9 @@ const schema = {
   },
 }
 
-const storage = new Store({ schema })
+export const storage = new Store({ schema })
 
 // Initialize Logs
-
-let users: string[] = []
 
 const logs = new Logs(storage.get('logs_dir'))
 
@@ -119,7 +117,7 @@ async function registerListeners() {
   // Settings API
 
   ipcMain.on('set-setting', (event, data) => {
-    console.log(data)
+    console.log(data)  // TODO Remove
     storage.set(data.setting, data.value)
   })
 
@@ -129,55 +127,23 @@ async function registerListeners() {
 
   ipcMain.on('check-game-dir', (event, installation: Installation) => {
     if (installation === 'vanilla') {
-      fs.access(logsPath.replaceAll("\\", "/"), (err: Error) => {
+      fs.access(path.join(logsPath, 'latest.log').replaceAll("\\", "/"), (err: Error) => {
         event.reply( 'check-game-dir-reply', err ? false : true )
       })
     } else if (installation === 'lunar') {
-      fs.access(path.join(os.homedir(), "/.lunarclient/offline/1.8/logs").replaceAll("\\", "/"), (err: Error) => {
+      fs.access(path.join(os.homedir(), "/.lunarclient/offline/1.8/logs/latest.log").replaceAll("\\", "/"), (err: Error) => {
         event.reply( 'check-game-dir-reply', err ? false : true )
       })
     } else if (installation === 'badlion') {
-      fs.access(path.join(logsPath, "blclient/minecraft").replaceAll("\\", "/"), (err: Error) => {
+      fs.access(path.join(logsPath, "blclient/minecraft/latest.log").replaceAll("\\", "/"), (err: Error) => {
         event.reply( 'check-game-dir-reply', err ? false : true )
       })
     } else if (installation === 'pvplounge') {
-      fs.access(path.join(logsPath, "../../.pvplounge/logs").replaceAll("\\", "/"), (err: Error) => {
+      fs.access(path.join(logsPath, "../../.pvplounge/logs/latest.log").replaceAll("\\", "/"), (err: Error) => {
         event.reply( 'check-game-dir-reply', err ? false : true )
       })
     }
   })
-
-  // ipcMain.on('check-game-dir', (event, installation: Installation) => {
-
-  //   let installationExists: boolean
-
-  //   switch (installation) {
-  //     case 'vanilla':
-  //       installationExists = fs.existsSync(
-  //         path.join(logsPath, 'latest.log').replaceAll('\\', '/')
-  //       )
-  //     case 'lunar':
-  //       installationExists = fs.existsSync(
-  //         path
-  //           .join(os.homedir(), '/.lunarclient/offline/1.8/logs/latest.log')
-  //           .replaceAll('\\', '/')
-  //       )
-  //     case 'badlion':
-  //       installationExists = fs.existsSync(
-  //         path
-  //           .join(logsPath, 'blclient/minecraft/latest.log')
-  //           .replaceAll('\\', '/')
-  //       )
-  //     case 'pvplounge':
-  //       installationExists = fs.existsSync(
-  //         path
-  //           .join(logsPath, '../../.pvplounge/logs/latest.log')
-  //           .replaceAll('\\', '/')
-  //       )
-  //   }
-
-  //   return installationExists
-  // })
 
   ipcMain.on('get-game-dir', (event, installation: Installation) => {
     switch (installation) {
@@ -199,21 +165,15 @@ async function registerListeners() {
   // Logs API
 
   logs.on('server_change', () => {
-    users = []
-
-    mainWindow?.webContents.send('server_change', users)
+    mainWindow?.webContents.send('server_change')
   })
 
   logs.on('join', (name: string) => {
-    users.push(name)
-
-    mainWindow?.webContents.send('join', users)
+    mainWindow?.webContents.send('join', name)
   })
 
   logs.on('leave', (name: string) => {
-    users = users.filter(user => user != name)
-
-    mainWindow?.webContents.send('leave', users)
+    mainWindow?.webContents.send('leave', name)
   })
 }
 

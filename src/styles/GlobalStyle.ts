@@ -58,6 +58,16 @@ export const GlobalStyle = createGlobalStyle`
     font-family: Minecraft, Arial, Helvetica, sans-serif;
   }
 
+  // Table Styles
+
+  td {
+    padding: 0.2rem;
+  }
+
+  tr:first-of-type {
+    font-weight: bold;
+  }
+
   // .inline-children {
   //   text-align: center;
   // }

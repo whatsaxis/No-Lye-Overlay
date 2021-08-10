@@ -49,7 +49,7 @@ class Logs extends EventEmitter {
               this.emit('server_change')
             }
 
-            if (/(.*) joined \((\d)\/(\d)\)!/.test(message)) {
+            if (/(.*) has joined \((\d)\/(\d)\)!/.test(message)) {
               const name = message.split(' ')[0]
               console.log(name + ' has joined!')
 

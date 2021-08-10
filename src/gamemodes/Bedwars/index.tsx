@@ -1,4 +1,4 @@
-import { BedwarsStyles } from './styles';
+import { BedwarsStyles } from './styles'
 
 
 export interface Props {

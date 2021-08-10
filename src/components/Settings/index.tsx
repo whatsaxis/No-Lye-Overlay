@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import { SettingsStyles, Setting } from './styles'
 
@@ -14,15 +14,20 @@ const Settings: React.FC = () => {
     const apiValidityRef = useRef<Validity>(null) // useRef() instead of React.createRef()!
     const clientValidityRef = useRef<Validity>(null)
 
+    // https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component
     useEffect(() => {
+        let isMounted = true
+
         const checkAPIKeyOnMount = async () => {
             const node = apiValidityRef.current
             const apiKeyIsValid = await (await fetch(`https://api.hypixel.net/key?key=${window.Main.getSetting('api_key')}`)).json()
 
-            if (apiKeyIsValid.success) {
-                node?.setValid(true)
-            } else {
-                node?.setValid(false)
+            if (isMounted) {
+                if (apiKeyIsValid.success) {
+                    node?.setValid(true)
+                } else {
+                    node?.setValid(false)
+                }
             }
 
             apiValidityRef.current?.show()
@@ -32,10 +37,12 @@ const Settings: React.FC = () => {
             const node = clientValidityRef.current
             const gamePathExists = await window.Main.checkGameDirectory(installations[0])
 
-            if (gamePathExists) {
-                node?.setValid(true)
-            } else {
-                node?.setValid(false)
+            if (isMounted) {
+                if (gamePathExists) {
+                    node?.setValid(true)
+                } else {
+                    node?.setValid(false)
+                }
             }
 
             clientValidityRef.current?.show()
@@ -43,6 +50,8 @@ const Settings: React.FC = () => {
 
         checkAPIKeyOnMount()
         checkGameInstallationOnMount()
+
+        return () => { isMounted = false }
     }, [])
 
     

@@ -68,6 +68,10 @@ export const api = {
   on: (channel: string, callback: Function) => {
     ipcRenderer.on(channel, (_: Electron.IpcRendererEvent, data: any) => callback(_, data))
   },
+
+  removeListener: (channel: string) => {
+    ipcRenderer.removeAllListeners(channel)
+  }
 }
 
 

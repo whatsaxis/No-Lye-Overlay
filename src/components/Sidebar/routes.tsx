@@ -1,6 +1,6 @@
-import Bedwars from '../Bedwars'
-import Skywars from '../Skywars'
-import Duels from '../Duels'
+import Bedwars from '../../gamemodes/Bedwars'
+import Skywars from '../../gamemodes/Skywars'
+import Duels from '../../gamemodes/Duels'
 import Settings from '../Settings'
 
 import BedwarsIcon from '../../../assets/images/Sidebar/bedwars.png'

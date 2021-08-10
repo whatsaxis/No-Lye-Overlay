@@ -1,4 +1,4 @@
-import { SkywarsStyles } from './styles';
+import { SkywarsStyles } from './styles'
 
 export interface Props {
     
