@@ -108,6 +108,18 @@ async function registerListeners() {
     } else {
       mainWindow.maximize()
     }
+
+    // mainWindow?.webContents.send('join', 'Notch')
+    // mainWindow?.webContents.send('join', 'LadyBleu')
+    // mainWindow?.webContents.send('join', 'hypixel')
+    // mainWindow?.webContents.send('join', 'xOleg')
+    // mainWindow?.webContents.send('join', 'the_sad_sea')
+    // mainWindow?.webContents.send('join', 'ImSweatty')
+    // mainWindow?.webContents.send('join', 'SpeedToggled')
+    // mainWindow?.webContents.send('join', 'WhatsAxis')
+    // mainWindow?.webContents.send('join', 'chbv')
+    // mainWindow?.webContents.send('join', 'Deemoans')
+    // mainWindow?.webContents.send('join', 'BusinessGull725')
   })
 
   ipcMain.on('minimize-window', event => {

@@ -25,4 +25,4 @@
 - Show WLR
 - Show FKDR
 - Show Finals
-- Show Winse
+- Show Wins

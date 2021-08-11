@@ -2,16 +2,21 @@ import React, { useState } from 'react';
 
 import { GlobalStyle, Wrapper } from './styles/GlobalStyle'
 
+import { useCache } from './useCache'
+
 import Sidebar from './components/Sidebar'
 import Taskbar from './components/Taskbar'
 import Overlay from './components/Overlay'
 
 import routes from './components/Sidebar/routes'
 
-export const OverlayContext = React.createContext(Array());
+export const OverlayContext = React.createContext<any>([])
+export const CacheContext = React.createContext<any>([])
 
 export function App() {
   const [currentOverlay, setCurrentOverlay] = useState(routes[routes.length - 1]);
+
+  const [getFromCache, addToCache, cacheIncludes,c ] = useCache()
 
   return (
     <>
@@ -19,12 +24,14 @@ export function App() {
       <Taskbar />
 
       <OverlayContext.Provider value={ [currentOverlay, setCurrentOverlay] }>
-        <Wrapper>
+        <CacheContext.Provider value={ [getFromCache, addToCache, cacheIncludes,c] }>
+          <Wrapper>
 
-          <Sidebar />
-          <Overlay />
-          
-        </Wrapper>
+            <Sidebar />
+            <Overlay />
+            
+          </Wrapper>
+        </CacheContext.Provider>
       </OverlayContext.Provider>
     </>
   )

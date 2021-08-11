@@ -1,9 +1,6 @@
 {
   "name": "tokyo-overlay",
-  "contributors": [
-    "WhatsAxis",
-    "Sizzeh"
-  ],
+  "author": "WhatsAxis",
   "version": "1.0.0",
   "description": "A Hypixel stats overlay for the Tokyo Guild.",
   "main": "./.webpack/main/index.js",

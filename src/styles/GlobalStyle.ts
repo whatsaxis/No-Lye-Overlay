@@ -68,17 +68,50 @@ export const GlobalStyle = createGlobalStyle`
     font-weight: bold;
   }
 
-  // .inline-children {
-  //   text-align: center;
-  // }
+  // Table Color Styles
 
-  // .inline-children > * {
-  //     display: inline-block;
-  //     vertical-align: middle;
-  // }
+  .none {
+    color: #FFFFFF;
+  }
+
+  .very-low {
+    color: #4EE84E;
+  }
+
+  .low {
+    color: #00AA00;
+  }
+
+  .medium {
+    color: #D3D608;
+  }
+
+  .high {
+    color: #ac353f;
+  }
+
+  .very-high {
+    color: #710708;
+  }
+
+  .extreme {
+    color: #f753f7;
+  }
+
+  // Tag Styles
+
+  .nick {
+    color: #00AA00;
+  }
+
+  .sniper {
+
+  }
+
+  // Misc. Styles
 
   .inline-children > * {
-      display: inline;
+    display: inline;
   }
 `
 
