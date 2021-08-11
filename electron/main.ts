@@ -109,6 +109,12 @@ async function registerListeners() {
       mainWindow.maximize()
     }
 
+    /*
+    Testing!
+
+    I know, I should really be writing proper tests.
+    */
+
     // mainWindow?.webContents.send('join', 'Notch')
     // mainWindow?.webContents.send('join', 'LadyBleu')
     // mainWindow?.webContents.send('join', 'hypixel')
@@ -137,6 +143,7 @@ async function registerListeners() {
     event.returnValue = storage.get(setting)
   })
 
+  // Fix this!
   ipcMain.on('check-game-dir', (event, installation: Installation) => {
     if (installation === 'vanilla') {
       fs.access(path.join(logsPath, 'latest.log').replaceAll("\\", "/"), (err: Error) => {

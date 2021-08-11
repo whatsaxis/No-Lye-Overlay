@@ -1,5 +1,3 @@
-import { useContext } from 'react'
-
 import { useUsers } from '../../useUsers'
 import { isNick, getRankJSX } from '../../helpers'
 
@@ -24,14 +22,10 @@ const Duels: React.FC = () => {
                         <td>KDR</td>
                     </tr>
                     {
-                        users.map(user => {
-
-                            if (!isNick(user)) {
-
-                            }
-
+                        users.map((user, i) => {
+                            console.log(user)
                             return (
-                                <tr key={ user._internalUsername }>
+                                <tr key={ i }>
                                     <td>{ isNick(user) ? <span className="nick">NICK</span> : '' }</td>
                                     <td>{ isNick(user) ? <span className="nick">{ user._internalUsername }</span> : getRankJSX(user) }</td>
                                     <td>{ isNick(user) ? 'N/A' : (user?.player?.stats?.Duels?.wins ? user?.player?.stats?.Duels?.wins : "0") }</td>

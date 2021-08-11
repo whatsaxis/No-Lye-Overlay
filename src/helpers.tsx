@@ -2,11 +2,11 @@ import { Color, ColorCode, color_map, color_codes } from './colors'
 
 
 export function isNick(jsonResponse: any) {
-  return jsonResponse._internalNick
+  return jsonResponse?._internalNick
 }
 
 export function getRank(jsonResponse: any) {
-  if (jsonResponse.player?.rank) {
+  if (jsonResponse?.player?.rank) {
     // Check for special ranks (YOUTUBE, ADMIN, etc.)
     if (jsonResponse.player.rank === 'YOUTUBER') {
       return '&c[&fYOUTUBE&c] ' + jsonResponse._internalUsername
@@ -18,13 +18,13 @@ export function getRank(jsonResponse: any) {
       return '&7' + jsonResponse._internalUsername
     }
   } else if (
-    jsonResponse.player?.monthlyPackageRank &&
-    jsonResponse.player?.monthlyPackageRank !== 'NONE'
+    jsonResponse?.player?.monthlyPackageRank &&
+    jsonResponse?.player?.monthlyPackageRank !== 'NONE'
   ) {
     // Check if is MVP++
     const plusColor: Color = jsonResponse.player.rankPlusColor 
     return '&6[MVP' + color_map[plusColor] + "++&6] " + jsonResponse._internalUsername
-  } else if (jsonResponse.player?.newPackageRank) {
+  } else if (jsonResponse?.player?.newPackageRank) {
     // Check if is VIP...MVP+
     const rank = jsonResponse.player.newPackageRank.replace('_PLUS', '+')
 
@@ -40,7 +40,7 @@ export function getRank(jsonResponse: any) {
         return '&b[MVP' + color_map[plusColor] + '+&b] ' + jsonResponse._internalUsername
     }
   } else {
-    return '&7' + jsonResponse._internalUsername
+    return '&7' + jsonResponse?._internalUsername
   }
 }
 

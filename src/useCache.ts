@@ -35,5 +35,5 @@ export function useCache() {
         return cache[username]
     }
 
-    return [get, add, includes, cache]
+    return [get, add, includes]
 }

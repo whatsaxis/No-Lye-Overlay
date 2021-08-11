@@ -13,8 +13,18 @@ export function useUsers() {
 
     const [users, setUsers] = useState<any[]>([])
 
-    const api = new API( window.Main.getSetting('api_key') )
+    const [prevUsers, setPrevUsers] = useState<any[]>([])
+
+    /*
+    Setting the initial value of this state to [] prevents
+    an undefined thingy showing up in the table on startup,
+    because of the nature of .concat()
+    */
+
+    const [selectedStats, setSelectedStats] = useState<any>([])
+
     const [get, add, includes] = useContext(CacheContext)
+    const api = new API( window.Main.getSetting('api_key') )
 
     useEffect(() => {
         window.Main.on('server_change', (e: Electron.IpcRendererEvent) => {
@@ -22,6 +32,8 @@ export function useUsers() {
         })
         
         window.Main.on('join', async (e: Electron.IpcRendererEvent, user: string) => {
+            console.log(user + ' joined!')
+
             let stats: LooseObject = {}
 
             let uuid
@@ -29,20 +41,24 @@ export function useUsers() {
 
             if (includes(user)) {
                 uuid = get(user)
+                console.log('Fetched ' + user + "'s UUID from cache.")
             } else {
                 const userIsNick: boolean = await api.checkNick(user)
+                console.log('Checked if ' + user + ' is a nicked player.')
 
                 nick = true
                 if (!userIsNick) {
                     nick = false
 
                     uuid = await api.getUUID(user)
+                    console.log('Fetched ' + user + "'s UUID.")
                     add({ username: user, uuid: uuid })
                 }
             }
 
             if (!nick) {
                 stats = await api.getStats(uuid)
+                console.log('Fetched ' + user + "'s stats.")
             }
 
 
@@ -51,7 +67,12 @@ export function useUsers() {
             stats._internalUsername = user
             stats._internalNick = nick
 
-            setUsers(u => u.concat(stats))
+            setUsers(u => {
+                setPrevUsers(u)
+                return users
+            })
+
+            setSelectedStats(stats)
         })
         
         window.Main.on('leave', (e: Electron.IpcRendererEvent, user: string) => {
@@ -64,6 +85,10 @@ export function useUsers() {
             window.Main.removeListener('leave')
         }
     }, [])
+
+    useEffect(() => {
+        setUsers(prevUsers.concat(selectedStats))
+    }, [prevUsers])
 
     return users
 }

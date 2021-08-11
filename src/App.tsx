@@ -16,7 +16,7 @@ export const CacheContext = React.createContext<any>([])
 export function App() {
   const [currentOverlay, setCurrentOverlay] = useState(routes[routes.length - 1]);
 
-  const [getFromCache, addToCache, cacheIncludes,c ] = useCache()
+  const [getFromCache, addToCache, cacheIncludes] = useCache()
 
   return (
     <>
@@ -24,7 +24,7 @@ export function App() {
       <Taskbar />
 
       <OverlayContext.Provider value={ [currentOverlay, setCurrentOverlay] }>
-        <CacheContext.Provider value={ [getFromCache, addToCache, cacheIncludes,c] }>
+        <CacheContext.Provider value={ [getFromCache, addToCache, cacheIncludes] }>
           <Wrapper>
 
             <Sidebar />

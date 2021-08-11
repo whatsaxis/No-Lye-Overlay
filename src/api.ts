@@ -9,29 +9,26 @@ export class API {
     this.key = key
   }
 
-  getUUID(username: string) {
-    return fetch(`https://api.ashcon.app/mojang/v2/user/${username}`)
+  async getUUID(username: string) {
+    const res = await fetch(`https://api.ashcon.app/mojang/v2/user/${username}`)
     .then(data => data.json())
     .then(data => data.uuid)
+
+    return res
   }
 
-  checkNick(username: string) {
-    return fetch(`https://api.ashcon.app/mojang/v2/user/${username}`)
+  async checkNick(username: string) {
+    const res = await fetch(`https://api.ashcon.app/mojang/v2/user/${username}`)
     .then(data => data.json())
-    .then(data => {
-      if (data.code === 404) {
-        return true
-      } else {
-        return false
-      }
-    })
+
+    if (res.code === 404) return true
+    return false
   }
 
   async getStats(uuid: string) {
     const url = `https://api.hypixel.net/player?uuid=${uuid}&key=${this.key}`
 
-    console.log(url)
-    let stats = fetch(url).then(data => data.json())
+    let stats = await fetch(url).then(data => data.json())
 
     return stats
   }
