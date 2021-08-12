@@ -23,6 +23,7 @@ const Duels: React.FC = () => {
                     </tr>
                     {
                         users.map((user, i) => {
+                            console.log(user._internalUsername)
                             console.log(user)
                             return (
                                 <tr key={ i }>

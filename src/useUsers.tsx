@@ -17,7 +17,7 @@ export function useUsers() {
 
     /*
     Setting the initial value of this state to [] prevents
-    an undefined thingy showing up in the table on startup,
+    an undefined entry showing up in the table on startup,
     because of the nature of .concat()
     */
 
@@ -29,6 +29,8 @@ export function useUsers() {
     useEffect(() => {
         window.Main.on('server_change', (e: Electron.IpcRendererEvent) => {
             setUsers([])
+            setPrevUsers([])
+            setSelectedStats([])
         })
         
         window.Main.on('join', async (e: Electron.IpcRendererEvent, user: string) => {
@@ -68,6 +70,10 @@ export function useUsers() {
             stats._internalNick = nick
 
             setUsers(u => {
+                console.log("╔══════════════╗")
+                console.log("Previous state of users:")
+                console.log(u)
+                console.log("╚══════════════╝")
                 setPrevUsers(u)
                 return users
             })
@@ -76,7 +82,7 @@ export function useUsers() {
         })
         
         window.Main.on('leave', (e: Electron.IpcRendererEvent, user: string) => {
-            setUsers(u => u.filter(i => i.player.displayname !== user))
+            setUsers(u => u.filter(i => i._internalUsername !== user))
         })
 
         return () => {
@@ -88,7 +94,27 @@ export function useUsers() {
 
     useEffect(() => {
         setUsers(prevUsers.concat(selectedStats))
+
+        console.log("╔══════════════╗")
+        console.log("PrevUsers:")
+        console.log(prevUsers)
+        console.log("╚══════════════╝")
     }, [prevUsers])
+
+    useEffect(() => {
+        console.log("╔══════════════╗")
+        console.log("Users:")
+        console.log(users)
+        console.log("╚══════════════╝")
+    }, [users])
+
+    useEffect(() => {
+        console.log("╔══════════════╗")
+        console.log("selectedStats:")
+        console.log(selectedStats)
+        console.log("╚══════════════╝")
+        setUsers(prevUsers.concat(selectedStats))
+    }, [selectedStats])
 
     return users
 }

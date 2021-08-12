@@ -63,7 +63,7 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    icon: path.join(__dirname, 'assets', 'icon.png'), // TODO fix this
+    icon: path.join(__dirname, '../assets', 'icon.png'), // TODO fix this
     width: 1100,
     height: 700,
     minWidth: 800,
@@ -115,17 +115,12 @@ async function registerListeners() {
     I know, I should really be writing proper tests.
     */
 
-    // mainWindow?.webContents.send('join', 'Notch')
-    // mainWindow?.webContents.send('join', 'LadyBleu')
-    // mainWindow?.webContents.send('join', 'hypixel')
     // mainWindow?.webContents.send('join', 'xOleg')
+    // mainWindow?.webContents.send('join', 'WhatsAxis')
     // mainWindow?.webContents.send('join', 'the_sad_sea')
     // mainWindow?.webContents.send('join', 'ImSweatty')
     // mainWindow?.webContents.send('join', 'SpeedToggled')
-    // mainWindow?.webContents.send('join', 'WhatsAxis')
     // mainWindow?.webContents.send('join', 'chbv')
-    // mainWindow?.webContents.send('join', 'Deemoans')
-    // mainWindow?.webContents.send('join', 'BusinessGull725')
   })
 
   ipcMain.on('minimize-window', event => {

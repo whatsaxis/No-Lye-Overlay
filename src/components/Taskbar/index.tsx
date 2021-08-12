@@ -1,5 +1,7 @@
 import { TaskbarStyles, TaskbarTitle, TaskbarControl } from './styles'
 
+import AppIcon from '../../../assets/icons/icon.png'
+
 import CloseIcon from '../../../assets/images/Taskbar/close.svg'
 import ReframeIcon from '../../../assets/images/Taskbar/reframe.svg'
 import MinimizeIcon from '../../../assets/images/Taskbar/minimize.svg'
@@ -24,12 +26,13 @@ const Taskbar: React.FC = () => {
     return (
         <TaskbarStyles>
             <TaskbarTitle>Tokyo Overlay</TaskbarTitle>
+            {/* <img src={ AppIcon } height={ 25 } style={{ display: 'inline' }}></img> */}
 
             <TaskbarControl onClick={ handleClose }><img src={ CloseIcon } /></TaskbarControl>
             <TaskbarControl onClick={ handleReframe }><img src={ ReframeIcon } /></TaskbarControl>
             <TaskbarControl onClick={ handleMinimize }><img src={ MinimizeIcon } /></TaskbarControl>
         </TaskbarStyles>
-    );
+    )
 }
  
 export default Taskbar;
