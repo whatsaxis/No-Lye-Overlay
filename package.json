@@ -1,8 +1,8 @@
 {
-  "name": "tokyo-overlay",
+  "name": "no-lye-overlay",
   "author": "WhatsAxis",
   "version": "1.0.0",
-  "description": "A Hypixel stats overlay for the Tokyo Guild.",
+  "description": "A Hypixel stats overlay for the No Lye Guild.",
   "main": "./.webpack/main/index.js",
   "scripts": {
     "start": "electron-forge start",
@@ -67,9 +67,9 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "name": "Tokyo Overlay",
-        "executableName": "tokyo-overlay",
-        "icon": "assets/icon",
+        "name": "No Lye Overlay",
+        "executableName": "no-lye-overlay",
+        "icon": "assets/icons/icon.ico",
         "extraResource": [
           "assets"
         ]
@@ -99,7 +99,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "Tokyo Overlay"
+            "name": "No Lye Overlay"
           }
         },
         {

@@ -7,6 +7,6 @@ test('Taskbar should render', () => {
     const { getByText, getByAltText } = render(<Taskbar />)
 
     expect(
-        getByText('Tokyo Overlay')
+        getByText('No Lye Overlay')
     ).toBeTruthy()
 })

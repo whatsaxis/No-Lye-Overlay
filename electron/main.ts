@@ -108,19 +108,6 @@ async function registerListeners() {
     } else {
       mainWindow.maximize()
     }
-
-    /*
-    Testing!
-
-    I know, I should really be writing proper tests.
-    */
-
-    // mainWindow?.webContents.send('join', 'xOleg')
-    // mainWindow?.webContents.send('join', 'WhatsAxis')
-    // mainWindow?.webContents.send('join', 'the_sad_sea')
-    // mainWindow?.webContents.send('join', 'ImSweatty')
-    // mainWindow?.webContents.send('join', 'SpeedToggled')
-    // mainWindow?.webContents.send('join', 'chbv')
   })
 
   ipcMain.on('minimize-window', event => {

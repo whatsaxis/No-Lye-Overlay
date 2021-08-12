@@ -25,7 +25,7 @@ const handleMinimize = () => {
 const Taskbar: React.FC = () => {
     return (
         <TaskbarStyles>
-            <TaskbarTitle>Tokyo Overlay</TaskbarTitle>
+            <TaskbarTitle>No Lye Overlay</TaskbarTitle>
             {/* <img src={ AppIcon } height={ 25 } style={{ display: 'inline' }}></img> */}
 
             <TaskbarControl onClick={ handleClose }><img src={ CloseIcon } /></TaskbarControl>
