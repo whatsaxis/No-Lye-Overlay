@@ -5,6 +5,21 @@ export function isNick(jsonResponse: any) {
   return jsonResponse?._internalNick
 }
 
+export async function checkAPIKey(key: string) {
+  const res = await fetch(`https://api.hypixel.net/key?key=${key}`)
+  .then(data => data.json())
+  .then(data => data.success)
+
+  return res
+}
+
+export function checkSettings() {
+  const client = window.Main.getSetting('client')
+
+  if (checkAPIKey(window.Main.getSetting('api-key')) && client !== 'none' && window.Main.checkGameDirectory(client)) return true
+  return false
+}
+
 export function getRank(jsonResponse: any) {
   if (jsonResponse?.player?.rank) {
     // Check for special ranks (YOUTUBE, ADMIN, etc.)
@@ -21,11 +36,11 @@ export function getRank(jsonResponse: any) {
     jsonResponse?.player?.monthlyPackageRank &&
     jsonResponse?.player?.monthlyPackageRank !== 'NONE'
   ) {
-    // Check if is MVP++
+    // Check if MVP++
     const plusColor: Color = jsonResponse.player.rankPlusColor 
     return '&6[MVP' + color_map[plusColor] + "++&6] " + jsonResponse._internalUsername
   } else if (jsonResponse?.player?.newPackageRank) {
-    // Check if is VIP...MVP+
+    // Check if VIP...MVP+
     const rank = jsonResponse.player.newPackageRank.replace('_PLUS', '+')
 
     switch (rank) {
@@ -40,6 +55,7 @@ export function getRank(jsonResponse: any) {
         return '&b[MVP' + color_map[plusColor] + '+&b] ' + jsonResponse._internalUsername
     }
   } else {
+    // No rank
     return '&7' + jsonResponse?._internalUsername
   }
 }

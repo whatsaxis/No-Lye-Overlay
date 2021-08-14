@@ -12,19 +12,27 @@ class Logs extends EventEmitter {
 
   setPath = (path: string) => {
     fs.unwatchFile(this.path)
-    this.path = path
+    console.log('Unwatched File: ' +  this.path)
+    this.path = path + '/latest.log'
+    console.log(this.path)
     this.watch()
   }
 
   watch = () => {
+    if (this.path === 'null') return
+    console.log('Watching File: ' + this.path)
+
     let lastLog: any[] = []
     let logs: any[] = []
     let changedLogs: any[] = []
 
     fs.watchFile(
       this.path,
-      { persistent: true, interval: 4 },
+      { persistent: false, interval: 4 },
       (curr: any, prev: any) => {
+        if (this.path === 'null/latest.log') return
+
+        console.log('Change in log file')
         const logFile = fs.readFileSync(this.path, { encoding: 'utf8' })
 
         logs = logFile.split('\n')

@@ -24,7 +24,7 @@ export function useUsers() {
     const [selectedStats, setSelectedStats] = useState<any>([])
 
     const [get, add, includes] = useContext(CacheContext)
-    const api = new API( window.Main.getSetting('api_key') )
+    const api = new API( window.Main.getSetting('api-key') )
 
     useEffect(() => {
         window.Main.on('server_change', (e: Electron.IpcRendererEvent) => {

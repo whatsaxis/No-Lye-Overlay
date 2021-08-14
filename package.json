@@ -67,8 +67,8 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "name": "No Lye Overlay",
-        "executableName": "no-lye-overlay",
+        "name": "No-Lye-Overlay",
+        "executableName": "No Lye Overlay",
         "icon": "assets/icons/icon.ico",
         "extraResource": [
           "assets"
@@ -97,24 +97,7 @@
       ],
       "makers": [
         {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "No Lye Overlay"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
+          "name": "@electron-forge/maker-zip"
         }
       ]
     }

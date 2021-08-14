@@ -17,9 +17,17 @@ export class API {
     return res
   }
 
+  async checkAPIKey(key: string) {
+    const res = await fetch(`https://api.hypixel.net/key?key=${key}`)
+    .then(data => data.json())
+    .then(data => data.success)
+
+    return res
+  }
+
   async checkNick(username: string) {
     const res = await fetch(`https://api.ashcon.app/mojang/v2/user/${username}`)
-    .then(data => data.json())
+      .then(data => data.json())
 
     if (res.code === 404) return true
     return false

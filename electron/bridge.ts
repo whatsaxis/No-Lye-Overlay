@@ -1,7 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron'
 
 
-import { Installation } from './settings'
+import { Installation, StorageKey } from './settings'
 
 
 export const api = {
@@ -29,8 +29,8 @@ export const api = {
 
   // Settings API
 
-  setSetting: (setting: string, value: any) => {
-    ipcRenderer.send('set-setting', { setting: setting, value: value })
+  setSetting: (setting: StorageKey) => {
+    ipcRenderer.send('set-setting', setting)
   },
 
   getSetting: (setting: string) => {
@@ -52,6 +52,24 @@ export const api = {
       async function awaitResponse() {
         return new Promise((resolve, reject) => {
           ipcRenderer.once('check-game-dir-reply', (event, data) => {
+            resolve(data)
+          })
+        })
+      }
+
+      response = await awaitResponse()
+
+      return response
+  },
+
+  getGameDirectory: async (installation: Installation) => {
+    ipcRenderer.send('get-game-dir', installation)
+
+      let response
+
+      async function awaitResponse() {
+        return new Promise((resolve, reject) => {
+          ipcRenderer.once('get-game-dir-reply', (event, data) => {
             resolve(data)
           })
         })

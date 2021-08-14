@@ -7,20 +7,18 @@ const Store = require('electron-store')
 
 import Logs from './logs'
 
-import { Installation } from './settings'
+import { Installation, StorageKey } from './settings'
+import { getGameDirectory } from './helpers'
 
 /*
 File stuff
 */
 
 const path = require('path')
-const fs = require('fs')
+const { promises: fs } = require('fs')
 const os = require('os')
 
-const logsPath = path.join(require('minecraft-folder-path'), 'logs')
-
-const folderPath = path.join(os.homedir(), '/duels_overlay')
-const configPath = path.join(folderPath, 'config.json')
+export const logsPath = path.join(require('minecraft-folder-path'), 'logs')
 
 // Initialize Storage
 
@@ -31,23 +29,26 @@ const schema = {
   },
   client: {
     type: 'string',
-    default: 'vanilla',
+    default: 'none',
   },
-  logs_dir: {
-    type: 'string',
-    default: logsPath,
-  },
-  api_key: {
+  'api-key': {
     type: 'string',
     default: '',
   },
 }
 
+/*
+Initialize Storage
+
+This array is so that we cannot set random settings that
+won't be used and will help avoid mis-spellings
+*/
+
 export const storage = new Store({ schema })
 
 // Initialize Logs
 
-const logs = new Logs(storage.get('logs_dir'))
+const logs = new Logs(getGameDirectory(storage.get('client')))
 
 // Initialize Electron Window
 
@@ -68,8 +69,9 @@ function createWindow() {
     height: 700,
     minWidth: 800,
     minHeight: 400,
-    // backgroundColor: '#191622',
+    backgroundColor: '#03030F',
     frame: false,
+    show: false,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
@@ -81,19 +83,16 @@ function createWindow() {
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
   mainWindow.setOpacity(0.85)
 
+  mainWindow.once('ready-to-show', () => {
+    mainWindow?.show()
+  })
+
   mainWindow.on('closed', () => {
     mainWindow = null
   })
 }
 
 async function registerListeners() {
-  /**
-   * This comes from bridge integration, check bridge.ts
-   */
-  ipcMain.on('message', (_, message) => {
-    console.log(message)
-  })
-
   // Window Control API
 
   ipcMain.on('close-window', event => {
@@ -108,6 +107,10 @@ async function registerListeners() {
     } else {
       mainWindow.maximize()
     }
+
+    // mainWindow?.webContents.send('join', 'WhatsAxis')
+    // mainWindow?.webContents.send('join', 'chbv')
+    // mainWindow?.webContents.send('join', 'rrawrxd')
   })
 
   ipcMain.on('minimize-window', event => {
@@ -116,51 +119,68 @@ async function registerListeners() {
 
   // Settings API
 
-  ipcMain.on('set-setting', (event, data) => {
-    console.log(data)  // TODO Remove
-    storage.set(data.setting, data.value)
+  ipcMain.on('set-setting', (event, data: StorageKey) => {
+    if (data.name === 'client' && data.value !== 'none') {
+      storage.set(data.name, data.value)
+      logs.setPath( getGameDirectory(data.value as Installation) )
+    } else {
+      storage.set(data.name, data.value)
+    }
   })
 
-  ipcMain.on('get-setting', (event, setting: string) => {
+  ipcMain.on('get-setting', (event, setting: StorageKey) => {
     event.returnValue = storage.get(setting)
   })
 
   // Fix this!
-  ipcMain.on('check-game-dir', (event, installation: Installation) => {
-    if (installation === 'vanilla') {
-      fs.access(path.join(logsPath, 'latest.log').replaceAll("\\", "/"), (err: Error) => {
-        event.reply( 'check-game-dir-reply', err ? false : true )
-      })
-    } else if (installation === 'lunar') {
-      fs.access(path.join(os.homedir(), "/.lunarclient/offline/1.8/logs/latest.log").replaceAll("\\", "/"), (err: Error) => {
-        event.reply( 'check-game-dir-reply', err ? false : true )
-      })
-    } else if (installation === 'badlion') {
-      fs.access(path.join(logsPath, "blclient/minecraft/latest.log").replaceAll("\\", "/"), (err: Error) => {
-        event.reply( 'check-game-dir-reply', err ? false : true )
-      })
-    } else if (installation === 'pvplounge') {
-      fs.access(path.join(logsPath, "../../.pvplounge/logs/latest.log").replaceAll("\\", "/"), (err: Error) => {
-        event.reply( 'check-game-dir-reply', err ? false : true )
-      })
-    }
-  })
+  ipcMain.on('check-game-dir', async (event, installation: Installation) => {
+    const checkIfExists = async (path: string) => {
+      let cleanPath = path.replaceAll('\\', '/')
 
-  ipcMain.on('get-game-dir', (event, installation: Installation) => {
+      try {
+        await fs.access(cleanPath)
+        return true
+      } catch {
+        return false
+      }
+    }
+
+    let exists
+
     switch (installation) {
       case 'vanilla':
-        return logsPath.replaceAll('\\', '/')
+        exists = await checkIfExists(logsPath)
+        event.reply('check-game-dir-reply', exists)
+        break
       case 'lunar':
-        return path
-          .join(os.homedir(), '/.lunarclient/offline/1.8/logs')
-          .replaceAll('\\', '/')
+        exists = await checkIfExists(path.join(os.homedir(), '/.lunarclient/offline/1.8/logs'))
+        event.reply('check-game-dir-reply', exists)
+        break
       case 'badlion':
-        return path.join(logsPath, 'blclient/minecraft').replaceAll('\\', '/')
+        exists = await checkIfExists(path.join(logsPath, 'blclient/minecraft'))
+        event.reply('check-game-dir-reply', exists)
+        break
       case 'pvplounge':
-        return path
-          .join(logsPath, '../../.pvplounge/logs')
-          .replaceAll('\\', '/')
+        exists = await checkIfExists(path.join(logsPath, '../../.pvplounge/logs'))
+        event.reply('check-game-dir-reply', exists)
+        break
     }
+    //   const exists = await checkIfExists(path.join(logsPath, 'latest.log'))
+    //   event.reply('check-game-dir-reply', exists)
+    // } else if (installation === 'lunar') {
+    //   const exists = await checkIfExists(path.join(os.homedir(), '/.lunarclient/offline/1.8/logs/latest.log'))
+    //   event.reply('check-game-dir-reply', exists)
+    // } else if (installation === 'badlion') {
+    //   const exists = await checkIfExists(path.join(logsPath, 'blclient/minecraft/latest.log'))
+    //   event.reply('check-game-dir-reply', exists)
+    // } else if (installation === 'pvplounge') {
+    //   const exists = await checkIfExists(path.join(logsPath, '../../.pvplounge/logs/latest.log')))
+    //   event.reply('check-game-dir-reply', exists)
+    // }
+  })
+
+  ipcMain.on('get-game-dir', async (event, installation: Installation) => {
+    event.reply('get-game-dir-reply', getGameDirectory(installation))
   })
 
   // Logs API
@@ -178,27 +198,27 @@ async function registerListeners() {
   })
 }
 
-function installReactDevTools() {
-  installExtension(REACT_DEVELOPER_TOOLS)
-    .then(name => console.log(`Added Extension:  ${name}`))
-    .catch(err => console.log('An error occurred: ', err))
-}
-
-app
-  .on('ready', createWindow)
-  .whenReady()
-  .then(registerListeners)
-  .then(installReactDevTools) // Remove in production
-  .catch(e => console.error(e))
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
+  function installReactDevTools() {
+    installExtension(REACT_DEVELOPER_TOOLS)
+      .then(name => console.log(`Added Extension:  ${name}`))
+      .catch(err => console.log('An error occurred: ', err))
   }
-})
 
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow()
-  }
-})
+  app
+    .on('ready', createWindow)
+    .whenReady()
+    .then(registerListeners)
+    .then(installReactDevTools) // Remove in production
+    .catch(e => console.error(e))
+
+  app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+      app.quit()
+    }
+  })
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow()
+    }
+  })
