@@ -2,6 +2,8 @@ const EventEmitter = require('events')
 
 const fs = require('fs')
 
+import { storage } from './main'
+
 class Logs extends EventEmitter {
   constructor(path: string) {
     super()
@@ -51,6 +53,9 @@ class Logs extends EventEmitter {
           if (/\[[^]*\] \[Client thread\/INFO\]: \[CHAT\] [^]*/.test(log)) {
             const message = log.split('[CHAT] ')[1].trim()
 
+            console.log(message)
+            // console.log(`${ storage.get('username') } joined the lobby!`)
+            // console.log(`${ storage.get('username') } has joined \((\d)\/(\d)\)!`)
             if (/Sending you to (.*)!/.test(message)) {
               console.log(message)
 
@@ -59,9 +64,15 @@ class Logs extends EventEmitter {
 
             if (/(.*) has joined \((\d)\/(\d)\)!/.test(message)) {
               const name = message.split(' ')[0]
+
               console.log(name + ' has joined!')
 
               this.emit('join', name)
+            }
+
+            if (message === "YOU WON! Want to play again? CLICK HERE!") {
+              console.log('Game ended with win')
+              this.emit('server_change')
             }
 
             if (/(.*) has quit!/.test(message)) {

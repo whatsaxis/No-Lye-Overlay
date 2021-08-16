@@ -4,16 +4,18 @@ import { getRankJSX, checkSettings } from '../../helpers'
 import { getTag } from './tags'
 
 import { DuelsStyles } from './styles'
+import BinIcon from '../../../assets/images/Overlays/bin.svg'
 
 // https://chiragagrawal65.medium.com/how-to-import-ipcrenderer-in-renderer-process-component-26fef55fa4b7
 
 const Duels: React.FC = () => {
     if (checkSettings()) {
-        const users = useUsers()
+        const { users, clearUsers } = useUsers()
 
         return (
             <DuelsStyles>
     
+                <button onClick={ () => clearUsers() } id="clear-users"><img height={ 20 } src={ BinIcon } /></button>
                 <table>
                     <tbody>
                         <tr>
@@ -23,21 +25,23 @@ const Duels: React.FC = () => {
                             <td>Kills</td>
                             <td>WLR</td>
                             <td>KDR</td>
+                            <td>Title</td>
                             <td>Score</td>
                         </tr>
                         {
                             users.map((user, i) => {
                                 console.log(user._internalUsername)
                                 const stats = getTag(user)
-                                console.log(getRankJSX(user))
+
                                 return (
-                                    <tr key={ user._internalUsername } className={ stats?.classTag === 'error' ? stats?.classTag : '' }>
+                                    <tr key={ user._internalUsername } className={ stats?.classTag === 'error' ? 'error' : '' }>
                                         <td className={ stats?.classTag }>{ stats?.tag }</td>
                                         <td>{ getRankJSX(user) }</td>
                                         <td className={ stats?.winsColor }>{ stats?.wins }</td>
                                         <td className={ stats?.killsColor }>{ stats?.kills }</td>
                                         <td className={ stats?.wlrColor }>{ stats?.wlr }</td>
                                         <td className={ stats?.kdrColor }>{ stats?.kdr }</td>
+                                        <td>{ stats?.title }</td>
                                         <td>{ stats?.score }</td>
                                     </tr>
                                 )

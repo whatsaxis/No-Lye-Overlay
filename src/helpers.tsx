@@ -37,6 +37,22 @@ export function checkSettings() {
   return false
 }
 
+export function colorCodesToJSX(colorCodeString: string) {
+  let segments: JSX.Element[] = []
+  colorCodeString?.split('&').forEach((segment: string) => {
+      const color: ColorCode = "&" + segment[0] as ColorCode
+      segments.push(<span style={{ color: color_codes[color] }}>{ segment.slice(1) }</span>)
+  })
+
+  return (
+    <>
+    {
+      segments.map(segment => segment)
+    }
+    </>
+  )
+}
+
 export function getRank(jsonResponse: any) {
   if (jsonResponse.player.rank) {
     // Check for special ranks (YOUTUBE, ADMIN, etc.)
@@ -72,7 +88,7 @@ export function getRank(jsonResponse: any) {
       case 'MVP+':
         let plusColor: Color = jsonResponse.player.rankPlusColor
         if (!plusColor) plusColor = 'RED'
-        
+
         return '&b[MVP' + color_map[plusColor] + '+&b] ' + jsonResponse._internalUsername
     }
   } else {
@@ -92,19 +108,7 @@ export function getRankJSX(user: any) {
 
   const rank = getRank(user)
 
-  let segments: JSX.Element[] = []
-  rank?.split('&').forEach((segment: string) => {
-      const color: ColorCode = "&" + segment[0] as ColorCode
-      segments.push(<span style={{ color: color_codes[color] }}>{ segment.slice(1) }</span>)
-  })
-
-  return (
-    <>
-    {
-      segments.map(segment => segment)
-    }
-    </>
-  )
+  return rank === undefined ? user._internalUsername : colorCodesToJSX(rank)
 }
 
 export interface LooseObject {

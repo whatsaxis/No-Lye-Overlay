@@ -26,11 +26,15 @@ export function useUsers() {
     const [get, add, includes] = useContext(CacheContext)
     const api = new API( window.Main.getSetting('api-key') )
 
+    const clearUsers = () => {
+        setUsers([])
+        setPrevUsers([])
+        setSelectedStats([])
+    }
+
     useEffect(() => {
         window.Main.on('server_change', (e: Electron.IpcRendererEvent) => {
-            setUsers([])
-            setPrevUsers([])
-            setSelectedStats([])
+            clearUsers()
         })
         
         window.Main.on('join', async (e: Electron.IpcRendererEvent, user: string) => {
@@ -116,5 +120,5 @@ export function useUsers() {
         setUsers(prevUsers.concat(selectedStats))
     }, [selectedStats])
 
-    return users
+    return { users: users, clearUsers: clearUsers }
 }

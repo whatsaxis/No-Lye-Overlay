@@ -1,3 +1,4 @@
+import { getTitleJSX } from './title'
 import { calculateLevelFromEXP, roundTo2Digits, commaify, playerDataExists } from '../../helpers'
 
 
@@ -85,7 +86,7 @@ function getRowThreatColors(stats: any) {
         if (kills <= 500) colors.killsColor = 'very-low'
         else if (kills <= 1000) colors.killsColor = 'low'
         else if (kills <= 2000) colors.killsColor = 'medium'
-        else if (kills <= 7500) colors.killsColor = 'high'
+        else if (kills <= 10000) colors.killsColor = 'high'
         else if (kills <= 20000) colors.killsColor = 'very-high'
         else if (kills > 20000) colors.killsColor = 'extreme'
     
@@ -114,7 +115,7 @@ export function getTag(stats: any) {
 
     const rowColors = getRowThreatColors(stats)
 
-    const base = { wins: '', kills: '', wlr: '', kdr: '', score: '', ...rowColors }
+    const base = { wins: '', kills: '', wlr: '', kdr: '', score: '', title: '',...rowColors }
 
     if (!/^[a-zA-Z0-9_]*$/.test(stats._internalUsername) || stats.success === false) return { tag: tags.ERROR, classTag: classTags.ERROR, ...base }
     if (stats._internalNick === true) return { tag: tags.NICK, classTag: classTags.NICK, ...base }
@@ -138,8 +139,10 @@ export function getTag(stats: any) {
         const wlr = (wins / losses)
         const kdr = (kills / deaths)
 
+        const title = getTitleJSX(wins)
+
         // Base object
-        const base2 = { wins: commaify(wins), kills: commaify(kills), wlr: commaify(roundTo2Digits(wlr)), kdr: commaify(roundTo2Digits(kdr)), score: commaify(roundTo2Digits(score)), ...rowColors }
+        const base2 = { wins: commaify(wins), kills: commaify(kills), wlr: commaify(roundTo2Digits(wlr)), kdr: commaify(roundTo2Digits(kdr)), score: commaify(roundTo2Digits(score)), title: title,...rowColors }
 
         // Sniper Check
         if ( wins <= 150 && calculateLevelFromEXP(stats.player.networkExp) <= 15 ) return { tag: tags.SNIPER, classTag: classTags.SNIPER, ...base2, ...rowColors }
