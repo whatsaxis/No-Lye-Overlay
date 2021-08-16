@@ -108,9 +108,18 @@ async function registerListeners() {
       mainWindow.maximize()
     }
 
-    // mainWindow?.webContents.send('join', 'WhatsAxis')
-    // mainWindow?.webContents.send('join', 'chbv')
-    // mainWindow?.webContents.send('join', 'rrawrxd')
+    mainWindow?.webContents.send('join', 'WhatsAxis')
+    mainWindow?.webContents.send('join', 'chbv')
+    mainWindow?.webContents.send('join', 'hypixel')
+    mainWindow?.webContents.send('join', 'Shrek')
+    mainWindow?.webContents.send('join', 'the_sad_sea')
+    mainWindow?.webContents.send('join', 'xOleg')
+    mainWindow?.webContents.send('join', 'okdub')
+    mainWindow?.webContents.send('join', 'OKDUB')
+    mainWindow?.webContents.send('join', 'asdasdasdasdasdasd sad sad as d')
+    mainWindow?.webContents.send('join', 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
+    mainWindow?.webContents.send('join', 'ae')
+    mainWindow?.webContents.send('join', 'asdasda-asda-sd===-')
   })
 
   ipcMain.on('minimize-window', event => {

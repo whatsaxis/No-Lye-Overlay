@@ -61,7 +61,13 @@ export const GlobalStyle = createGlobalStyle`
   // Table Styles
 
   td {
-    padding: 0.2rem;
+    padding: 0.35rem;
+    padding-left: 2.25rem;
+  }
+
+  td:first-of-type {
+    padding: 0.35rem;
+    padding-left: 0;
   }
 
   tr:first-of-type {
@@ -105,7 +111,15 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .sniper {
+    color: #E344DE;
+  }
 
+  .error {
+    color: #F51D1D;
+  }
+
+  .error * {
+    color: #F51D1D !important;
   }
 
   // Misc. Styles

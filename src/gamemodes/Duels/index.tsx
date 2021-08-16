@@ -1,5 +1,5 @@
 import { useUsers } from '../../useUsers'
-import { isNick, getRankJSX, checkSettings } from '../../helpers'
+import { getRankJSX, checkSettings } from '../../helpers'
 
 import { getTag } from './tags'
 
@@ -23,21 +23,26 @@ const Duels: React.FC = () => {
                             <td>Kills</td>
                             <td>WLR</td>
                             <td>KDR</td>
+                            <td>Score</td>
                         </tr>
                         {
                             users.map((user, i) => {
                                 console.log(user._internalUsername)
-                                // console.log(getTag(user))
+                                const stats = getTag(user)
+                                console.log(getRankJSX(user))
                                 return (
-                                    <tr key={ user._internalUsername }>
-                                        <td>{ isNick(user) ? <span className="nick">NICK</span> : '' }</td>
-                                        <td>{ isNick(user) ? <span className="nick">{ user._internalUsername }</span> : getRankJSX(user) }</td>
-                                        <td>{ isNick(user) ? 'N/A' : (user?.player?.stats?.Duels?.wins ? user?.player?.stats?.Duels?.wins : "0") }</td>
-                                        <td>{ isNick(user) ? 'N/A' : (user?.player?.stats?.Duels?.kills ? user?.player?.stats?.Duels?.kills : "0") }</td>
-                                        <td>{ isNick(user) ? 'N/A' : String(Math.round(Number(user?.player?.stats?.Duels?.wins) / Number(user?.player?.stats?.Duels?.losses) * 100) / 100) }</td>
-                                        <td>{ isNick(user) ? 'N/A' : String(Math.round(Number(user?.player?.stats?.Duels?.kills) / Number(user?.player?.stats?.Duels?.deaths) * 100) / 100) }</td>
+                                    <tr key={ user._internalUsername } className={ stats?.classTag === 'error' ? stats?.classTag : '' }>
+                                        <td className={ stats?.classTag }>{ stats?.tag }</td>
+                                        <td>{ getRankJSX(user) }</td>
+                                        <td className={ stats?.winsColor }>{ stats?.wins }</td>
+                                        <td className={ stats?.killsColor }>{ stats?.kills }</td>
+                                        <td className={ stats?.wlrColor }>{ stats?.wlr }</td>
+                                        <td className={ stats?.kdrColor }>{ stats?.kdr }</td>
+                                        <td>{ stats?.score }</td>
                                     </tr>
                                 )
+
+                                
                             })
                         }
                     </tbody>
