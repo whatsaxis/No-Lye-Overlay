@@ -1,4 +1,4 @@
-import { Color, ColorCode, color_map, color_codes } from './colors'
+import { Color, ColorCode, ExtensionCode, color_map, color_codes, extension_map } from './colors'
 
 
 export function isNick(jsonResponse: any) {
@@ -38,10 +38,38 @@ export function checkSettings() {
 }
 
 export function colorCodesToJSX(colorCodeString: string) {
+  let currentColor: ColorCode | null = null
+  let appliedExtensionStyles: ExtensionCode[] = []
+
   let segments: JSX.Element[] = []
-  colorCodeString?.split('&').forEach((segment: string) => {
-      const color: ColorCode = "&" + segment[0] as ColorCode
-      segments.push(<span style={{ color: color_codes[color] }}>{ segment.slice(1) }</span>)
+
+  const splitColorCodeString = colorCodeString?.split('&')
+
+  splitColorCodeString.forEach((segment: string, index: number) => {
+      const color: string = ("&" + segment[0])
+      
+      if (extension_map.hasOwnProperty(color)) {
+        if (color === '&r') {
+          appliedExtensionStyles = []
+          currentColor = null
+        } else {
+          appliedExtensionStyles.push(extension_map[color as ExtensionCode] as ExtensionCode)
+        }
+      } else {
+        currentColor = color as ColorCode
+      }
+
+      
+      let tmp = currentColor
+      let extTmp = appliedExtensionStyles.map(style => extension_map[style])
+
+      if (currentColor === null) tmp = '&f'
+      segments.push(<span style={{
+        color: color_codes[tmp as ColorCode],
+        fontWeight: extTmp.includes('bold') ? 'bold' : 'normal',
+        fontStyle: extTmp.includes('italic') ? 'italic' : 'normal',
+
+      }}>{ segment.slice(1) }</span>)
   })
 
   return (

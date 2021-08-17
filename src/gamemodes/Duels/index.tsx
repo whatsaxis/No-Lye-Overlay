@@ -25,6 +25,8 @@ const Duels: React.FC = () => {
                             <td>Kills</td>
                             <td>WLR</td>
                             <td>KDR</td>
+                            <td>WS</td>
+                            <td>BWS</td>
                             <td>Title</td>
                             <td>Score</td>
                         </tr>
@@ -41,6 +43,8 @@ const Duels: React.FC = () => {
                                         <td className={ stats?.killsColor }>{ stats?.kills }</td>
                                         <td className={ stats?.wlrColor }>{ stats?.wlr }</td>
                                         <td className={ stats?.kdrColor }>{ stats?.kdr }</td>
+                                        <td className={ stats?.wsColor }>{ stats?.ws }</td>
+                                        <td className={ stats?.bwsColor }>{ stats?.bws }</td>
                                         <td>{ stats?.title }</td>
                                         <td>{ stats?.score }</td>
                                     </tr>

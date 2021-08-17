@@ -57,6 +57,15 @@ export const color_map = {
   BLACK: '&0',
 }
 
+export const extension_map = {
+  '&k': 'obfuscated',
+  '&l': 'bold',
+  '&m': 'strikethrough',
+  '&n': 'underline',
+  '&o': 'italic',
+  '&r': 'reset',
+}
+
 export type Color =
   | 'DARK_RED'
   | 'RED'
@@ -92,3 +101,11 @@ export type ColorCode =
   | '&d'
   | '&e'
   | '&f'
+
+export type ExtensionCode = 
+  | '&k'
+  | '&l'
+  | '&m'
+  | '&n'
+  | '&o'
+  | '&r'

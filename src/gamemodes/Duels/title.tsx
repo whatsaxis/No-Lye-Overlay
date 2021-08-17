@@ -64,7 +64,7 @@ const titles: Title[] = [
         name: 'Godlike',
         color: 'DARK_PURPLE',
         min: 10000 * 2,
-        increment: 2000 * 2,
+        increment: Infinity,
         bold: true
     }
 ]
