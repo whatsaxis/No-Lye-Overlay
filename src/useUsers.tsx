@@ -11,35 +11,29 @@ export function useUsers() {
     // Just in case useState doesn't work again:
     // https://ozmoroz.com/2018/11/why-my-setstate-doesnt-work/
 
-    const [users, setUsers] = useState<any[]>([])
-
-    const [prevUsers, setPrevUsers] = useState<any[]>([])
-
-    /*
-    Setting the initial value of this state to [] prevents
-    an undefined entry showing up in the table on startup,
-    because of the nature of .concat()
-    */
-
-    const [selectedStats, setSelectedStats] = useState<any>([])
 
     const [get, add, includes] = useContext(CacheContext)
+
+
+    const [users, setUsers] = useState<any[]>([])
+
     const api = new API( window.Main.getSetting('api-key') )
 
     const clearUsers = () => {
         setUsers([])
-        setPrevUsers([])
-        setSelectedStats([])
     }
 
     useEffect(() => {
         window.Main.on('server_change', (e: Electron.IpcRendererEvent) => {
             clearUsers()
+            console.log('--------------------')
         })
-        
-        window.Main.on('join', async (e: Electron.IpcRendererEvent, user: string) => {
-            console.log(user + ' joined!')
 
+        window.Main.on('who', (e: Electron.IpcRendererEvent, users: string[]) => {
+            console.log('Used /who')
+        })
+
+        window.Main.on('join', async (e: Electron.IpcRendererEvent, user: string) => {
             let stats: LooseObject = {}
 
             let uuid
@@ -50,7 +44,7 @@ export function useUsers() {
                 console.log('Fetched ' + user + "'s UUID from cache.")
             } else {
                 const userIsNick: boolean = await api.checkNick(user)
-                console.log('Checked if ' + user + ' is a nicked player.')
+                console.log(`Checked if ${ user } is a nicked player. [${ userIsNick }]`)
 
                 nick = true
                 if (!userIsNick) {
@@ -73,20 +67,17 @@ export function useUsers() {
             stats._internalUsername = user
             stats._internalNick = nick
 
-            setUsers(u => {
-                console.log("╔══════════════╗")
-                console.log("Previous state of users:")
-                console.log(u)
-                console.log("╚══════════════╝")
-                setPrevUsers(u)
-                return users
-            })
-
-            setSelectedStats(stats)
+            setUsers(u => [...u, stats])
         })
-        
+
+        window.Main.on('who', (e: Electron.IpcRendererEvent, users: string[]) => {
+            setUsers(users)
+            console.log('Used /who!')
+        })
+
         window.Main.on('leave', (e: Electron.IpcRendererEvent, user: string) => {
             setUsers(u => u.filter(i => i._internalUsername !== user))
+            console.log(user + ' left!')
         })
 
         return () => {
@@ -95,30 +86,6 @@ export function useUsers() {
             window.Main.removeListener('leave')
         }
     }, [])
-
-    useEffect(() => {
-        setUsers(prevUsers.concat(selectedStats))
-
-        console.log("╔══════════════╗")
-        console.log("PrevUsers:")
-        console.log(prevUsers)
-        console.log("╚══════════════╝")
-    }, [prevUsers])
-
-    useEffect(() => {
-        console.log("╔══════════════╗")
-        console.log("Users:")
-        console.log(users)
-        console.log("╚══════════════╝")
-    }, [users])
-
-    useEffect(() => {
-        console.log("╔══════════════╗")
-        console.log("selectedStats:")
-        console.log(selectedStats)
-        console.log("╚══════════════╝")
-        setUsers(prevUsers.concat(selectedStats))
-    }, [selectedStats])
 
     return { users: users, clearUsers: clearUsers }
 }

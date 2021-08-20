@@ -28,8 +28,7 @@ const Skywars: React.FC = () => {
                                 <td>Score</td>
                             </tr>
                             {
-                                users.map((user, i) => {
-                                    console.log(user._internalUsername)
+                                users.map((user) => {
                                     const stats = getTag(user)
     
                                     return (

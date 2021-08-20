@@ -4,8 +4,8 @@ import installExtension, {
 import { app, BrowserWindow, ipcMain } from 'electron'
 
 const Store = require('electron-store')
-
-import Logs from './logs'
+import readline from 'readline'
+import TailFile from '@logdna/tail-file'
 
 import { Installation, StorageKey } from './settings'
 import { getGameDirectory } from './helpers'
@@ -48,7 +48,8 @@ export const storage = new Store({ schema })
 
 // Initialize Logs
 
-const logs = new Logs(getGameDirectory(storage.get('client')))
+let logFileTail: TailFile | null = null
+let logFileReadline: readline.Interface | null = null
 
 // Initialize Electron Window
 
@@ -92,6 +93,78 @@ function createWindow() {
   })
 }
 
+async function startLogging() {
+  console.log("A")
+
+  // Reset logging
+  logFileReadline?.close()
+  logFileReadline = null
+
+  await logFileTail?.quit()
+  logFileTail = null
+
+  console.log(path.join(getGameDirectory(storage.get('client')), 'latest.log'))
+
+  // Restart it
+  logFileTail = new TailFile( path.join(getGameDirectory(storage.get('client')), 'latest.log') )
+  await logFileTail.start()
+
+  logFileReadline = readline.createInterface({
+    input: logFileTail
+  })
+
+  if (logFileTail !== null) {
+    console.log("B")
+    await logFileTail.start()
+
+    console.log()
+
+    logFileReadline.on('line', (log) => {
+      console.log(log)
+      setImmediate(() => {
+        if (/\[[^]*\] \[Client thread\/INFO\]: \[CHAT\] [^]*/.test(log)) {
+          console.log(log)
+    
+          const message = log.split('[CHAT] ')[1].trim()
+    
+          if (/Sending you to (.*)!/.test(message)) {
+            console.log('════════════ Server Change ════════════')
+            mainWindow?.webContents.send('server_change')
+          }
+    
+          if (message === "YOU WON! Want to play again? CLICK HERE!") {
+            console.log('Game ended with win')
+            mainWindow?.webContents.send('server_change')
+          }
+    
+          if (/^ONLINE: ((?:(?:\[[A-Z+]+\] )?[A-Za-z0-9_]{1,16}(?:, )?)+)$/.test(log)) {
+            console.log('User /who!')
+            const list = message.split(': ')[1]
+            const users = list.split(', ')
+
+            mainWindow?.webContents.send('who', users)
+          }
+
+          if (/(.*) has joined \((\d|\d\d)\/(\d|\d\d)\)!/.test(message)) {
+            const name = message.split(' ')[0]
+    
+            console.log(name + ' has joined!')
+    
+            mainWindow?.webContents.send('join', name)
+          }
+    
+          if (/(.*) has quit!/.test(message)) {
+            const name = message.split(' ')[0]
+            console.log(name + ' has left!')
+    
+            mainWindow?.webContents.send('leave', name)
+          }
+        }
+      })
+    })
+  }
+}
+
 async function registerListeners() {
   // Window Control API
 
@@ -112,23 +185,13 @@ async function registerListeners() {
     Amazing "testing suite"
     */
    
-    // mainWindow?.webContents.send('join', 'WhatsAxis')
-    // mainWindow?.webContents.send('join', 'chbv')
-    // mainWindow?.webContents.send('join', 'hypixel')
-    // mainWindow?.webContents.send('join', 'Shrek')
-    // mainWindow?.webContents.send('join', 'Espenode')
-    // mainWindow?.webContents.send('join', 'anrie')
-    // mainWindow?.webContents.send('join', 'lifelong')
-    // mainWindow?.webContents.send('join', 'rrawrxd')
-    // mainWindow?.webContents.send('join', 'BlackJaguar')
-    // mainWindow?.webContents.send('join', 'the_sad_sea')
-    // mainWindow?.webContents.send('join', 'xOleg')
-    // mainWindow?.webContents.send('join', 'okdub')
-    // mainWindow?.webContents.send('join', 'OKDUB')
-    // mainWindow?.webContents.send('join', 'asdasdasdasdasdasd sad sad as d')
-    // mainWindow?.webContents.send('join', 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
-    // mainWindow?.webContents.send('join', 'ae')
-    // mainWindow?.webContents.send('join', 'asdasda-asda-sd===-')
+    // const users = ['WhatsAxis', 'chbv', 'hypixel', 'Shrek', 'Espenode', 'anrie', 'lifelong', 'rrawrxd', 'BlackJaguar', 'xOleg', 'okdub', 'SkywarsKills', 'diboof']
+    
+    // console.log(users.length)
+
+    // for (const user of users) {
+    //   mainWindow?.webContents.send('join', user)
+    // }
   })
 
   ipcMain.on('minimize-window', event => {
@@ -137,10 +200,11 @@ async function registerListeners() {
 
   // Settings API
 
-  ipcMain.on('set-setting', (event, data: StorageKey) => {
+  ipcMain.on('set-setting', async (event, data: StorageKey) => {
     if (data.name === 'client' && data.value !== 'none') {
       storage.set(data.name, data.value)
-      logs.setPath( getGameDirectory(data.value as Installation) )
+
+      await startLogging()
     } else {
       storage.set(data.name, data.value)
     }
@@ -150,7 +214,6 @@ async function registerListeners() {
     event.returnValue = storage.get(setting)
   })
 
-  // Fix this!
   ipcMain.on('check-game-dir', async (event, installation: Installation) => {
     const checkIfExists = async (path: string) => {
       let cleanPath = path.replaceAll('\\', '/')
@@ -183,18 +246,6 @@ async function registerListeners() {
         event.reply('check-game-dir-reply', exists)
         break
     }
-    //   const exists = await checkIfExists(path.join(logsPath, 'latest.log'))
-    //   event.reply('check-game-dir-reply', exists)
-    // } else if (installation === 'lunar') {
-    //   const exists = await checkIfExists(path.join(os.homedir(), '/.lunarclient/offline/1.8/logs/latest.log'))
-    //   event.reply('check-game-dir-reply', exists)
-    // } else if (installation === 'badlion') {
-    //   const exists = await checkIfExists(path.join(logsPath, 'blclient/minecraft/latest.log'))
-    //   event.reply('check-game-dir-reply', exists)
-    // } else if (installation === 'pvplounge') {
-    //   const exists = await checkIfExists(path.join(logsPath, '../../.pvplounge/logs/latest.log')))
-    //   event.reply('check-game-dir-reply', exists)
-    // }
   })
 
   ipcMain.on('get-game-dir', async (event, installation: Installation) => {
@@ -203,17 +254,10 @@ async function registerListeners() {
 
   // Logs API
 
-  logs.on('server_change', () => {
-    mainWindow?.webContents.send('server_change')
-  })
-
-  logs.on('join', (name: string) => {
-    mainWindow?.webContents.send('join', name)
-  })
-
-  logs.on('leave', (name: string) => {
-    mainWindow?.webContents.send('leave', name)
-  })
+  const client = storage.get('client') 
+  if (client !== 'none') {
+    await startLogging()
+  }
 }
 
   function installReactDevTools() {

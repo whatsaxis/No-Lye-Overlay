@@ -145,8 +145,6 @@ function getRowThreatColors(stats: any) {
 }
 
 export function getTag(stats: any) {
-  console.log(stats)
-
   const rowColors = getRowThreatColors(stats)
 
   const base = {
@@ -220,8 +218,6 @@ export function getTag(stats: any) {
       }
 
     // Threat check
-    console.log(wins, kills, losses, deaths, wlr, kdr)
-
     if (score <= 3)
       return { tag: tags.NONE, classTag: classTags.NONE, ...base2 }
     else if (score <= 5)

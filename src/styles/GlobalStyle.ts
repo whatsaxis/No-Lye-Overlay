@@ -16,7 +16,6 @@ export const GlobalStyle = createGlobalStyle`
 
   :root {
     --theme-color: #03030F;
-    --secondary-color: #3e424b;
   }
 
   * {

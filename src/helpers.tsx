@@ -45,7 +45,7 @@ export function colorCodesToJSX(colorCodeString: string) {
 
   const splitColorCodeString = colorCodeString?.split('&')
 
-  splitColorCodeString.forEach((segment: string, index: number) => {
+  splitColorCodeString?.forEach((segment: string, index: number) => {
       const color: string = ("&" + segment[0])
       
       if (extension_map.hasOwnProperty(color)) {

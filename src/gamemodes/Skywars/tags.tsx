@@ -111,8 +111,6 @@ function getRowThreatColors(stats: any) {
 }
 
 export function getTag(stats: any) {
-    console.log(stats)
-
     const rowColors = getRowThreatColors(stats)
 
     const base = { wins: '', kills: '', wlr: '', kdr: '', star: '', score: '', ...rowColors }
@@ -145,17 +143,13 @@ export function getTag(stats: any) {
         const base2 = { wins: commaify(wins), kills: commaify(kills), wlr: commaify(roundTo2Digits(wlr)), kdr: commaify(roundTo2Digits(kdr)), score: commaify(roundTo2Digits(score)), star: star, ...rowColors }
         
         // Threat check
-        console.log(wins, kills, losses, deaths, wlr, kdr)
-
-        
-
         if (score <= 0.2) return { tag: tags.NONE, classTag: classTags.NONE, ...base2 }
         else if (score <= 0.6) return { tag: tags.VERY_LOW, classTag: classTags.VERY_LOW, ...base2 }
         else if (score <= 1.4) return { tag: tags.LOW, classTag: classTags.LOW, ...base2 }
         else if (score <= 2) return { tag: tags.MEDIUM, classTag: classTags.MEDIUM, ...base2 }
         else if (score <= 3.5) return { tag: tags.HIGH, classTag: classTags.HIGH, ...base2 }
         else if (score <= 8) return { tag: tags.VERY_HIGH, classTag: classTags.VERY_HIGH, ...base2 }
-        else if (score > 8) return { tag: tags.EXTREME, classTag: classTags.EXTREME, ...base2 }
+        else if (score > 8  ) return { tag: tags.EXTREME, classTag: classTags.EXTREME, ...base2 }
         else return { tag: tags.ERROR, classTag: classTags.ERROR, ...base2 }  // For safety - unlikely this will get executed!
     } 
 }

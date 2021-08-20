@@ -71,15 +71,9 @@ const titles: Title[] = [
 
 export function getTitleJSX(wins: number) {
     for (const t of titles) {
-        console.log(t)
         const max = t.min + (t.increment * 5)
 
-        console.log(t.min)
-        console.log(wins)
-        console.log(max)
-
         if (wins >= t.min && wins < max) {
-            console.log("a")
             const title = colorCodesToJSX(color_map.GOLD + "☆ " + color_map[t.color] + t.name)
 
             if (t.bold === true) {
