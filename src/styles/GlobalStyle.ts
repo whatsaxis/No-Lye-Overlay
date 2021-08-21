@@ -126,6 +126,22 @@ export const GlobalStyle = createGlobalStyle`
   .inline-children > * {
     display: inline;
   }
+
+  
+  #clear-users {
+    border: 0;
+    background: 0;
+    padding: 0.5rem;
+}
+
+  #clear-users:hover {
+      background-color: #3e424b;
+      cursor: pointer;
+  }
+
+  #clear-users *:hover {
+      cursor: pointer;
+  }
 `
 
 export const Wrapper = styled.div`

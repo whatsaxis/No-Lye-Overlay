@@ -1,6 +1,10 @@
 import { Color, ColorCode, ExtensionCode, color_map, color_codes, extension_map } from './colors'
 
 
+/*
+* Player Data
+*/
+
 export function isNick(jsonResponse: any) {
   return jsonResponse?._internalNick
 }
@@ -22,6 +26,22 @@ export function commaify(number: number) {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 }
 
+export function existsOrZero(stat: any) {
+  return stat ? stat : 0
+}
+
+
+/*
+* Shortcut function for existsOrZero()
+*/
+export function _(stat: any) {
+  return existsOrZero(stat)
+}
+
+/*
+* Settings
+*/
+
 export async function checkAPIKey(key: string) {
   const res = await fetch(`https://api.hypixel.net/key?key=${key}`)
   .then(data => data.json())
@@ -36,6 +56,10 @@ export function checkSettings() {
   if (checkAPIKey(window.Main.getSetting('api-key')) && client !== 'none' && window.Main.checkGameDirectory(client)) return true
   return false
 }
+
+/*
+* Color
+*/
 
 export function colorCodesToJSX(colorCodeString: string) {
   let currentColor: ColorCode | null = null

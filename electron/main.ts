@@ -185,13 +185,11 @@ async function registerListeners() {
     Amazing "testing suite"
     */
    
-    // const users = ['WhatsAxis', 'chbv', 'hypixel', 'Shrek', 'Espenode', 'anrie', 'lifelong', 'rrawrxd', 'BlackJaguar', 'xOleg', 'okdub', 'SkywarsKills', 'diboof']
-    
-    // console.log(users.length)
+    const users = ['WhatsAxis', 'chbv', 'hypixel', 'Shrek', 'Espenode', 'anrie', 'lifelong', 'rrawrxd', 'BlackJaguar', 'xOleg', 'okdub', 'SkywarsKills', 'diboof', 'Lokesnoke', 'chbv', 'MCVisuals', 'Codies', 'Quadrupled', 'the_sad_sea', 'e-asdas87duy90asud0======']
 
-    // for (const user of users) {
-    //   mainWindow?.webContents.send('join', user)
-    // }
+    for (const user of users) {
+      mainWindow?.webContents.send('join', user)
+    }
   })
 
   ipcMain.on('minimize-window', event => {
