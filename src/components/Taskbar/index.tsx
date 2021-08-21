@@ -1,6 +1,4 @@
-import { TaskbarStyles, TaskbarTitle, TaskbarControl } from './styles'
-
-import AppIcon from '../../../assets/icons/icon.png'
+import { TaskbarStyles, TaskbarControl } from './styles'
 
 import CloseIcon from '../../../assets/images/Taskbar/close.svg'
 import ReframeIcon from '../../../assets/images/Taskbar/reframe.svg'
@@ -25,8 +23,7 @@ const handleMinimize = () => {
 const Taskbar: React.FC = () => {
     return (
         <TaskbarStyles>
-            <TaskbarTitle>No Lye Overlay</TaskbarTitle>
-            {/* <img src={ AppIcon } height={ 25 } style={{ display: 'inline' }}></img> */}
+            {/* <TaskbarTitle>No Lye Overlay</TaskbarTitle> */}
 
             <TaskbarControl onClick={ handleClose }><img src={ CloseIcon } /></TaskbarControl>
             <TaskbarControl onClick={ handleReframe }><img src={ ReframeIcon } /></TaskbarControl>

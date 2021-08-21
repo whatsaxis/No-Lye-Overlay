@@ -21,15 +21,15 @@ export function App() {
   return (
     <>
       <GlobalStyle />
-      <Taskbar />
 
       <OverlayContext.Provider value={ [currentOverlay, setCurrentOverlay] }>
         <CacheContext.Provider value={ [getFromCache, addToCache, cacheIncludes] }>
           <Wrapper>
-
             <Sidebar />
-            <Overlay />
-            
+            <div>
+              <Taskbar />
+              <Overlay />
+            </div>
           </Wrapper>
         </CacheContext.Provider>
       </OverlayContext.Provider>

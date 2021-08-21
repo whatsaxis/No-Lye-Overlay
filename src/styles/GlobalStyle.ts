@@ -145,11 +145,7 @@ export const GlobalStyle = createGlobalStyle`
 `
 
 export const Wrapper = styled.div`
-  & {
-    display: flex;
-  }
-
   & > div {
-    width: 100%;
+    display: inline;
   }
 `

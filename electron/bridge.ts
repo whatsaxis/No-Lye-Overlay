@@ -5,14 +5,6 @@ import { Installation, StorageKey } from './settings'
 
 
 export const api = {
-  /**
-   * Here you can expose functions to the renderer process
-   * so they can interact with the main (electron) side
-   * without security problems.
-   *
-   * The API can accessed using `window.Main._____`
-   */
-
   // Window Control API
 
   closeWindow: () => {

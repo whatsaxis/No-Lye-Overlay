@@ -68,7 +68,7 @@ const Settings: React.FC = () => {
 
   return (
     <SettingsStyles>
-      <h1>Settings Menu</h1>
+      <h1>Settings</h1>
 
       <h2>General Settings</h2>
       <Setting>

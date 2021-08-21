@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 import { Valid, Invalid, Hidden } from './styles'
 
@@ -54,4 +54,4 @@ class Validity extends React.Component<{}, State> {
     }
 }
  
-export default Validity;
+export default Validity
