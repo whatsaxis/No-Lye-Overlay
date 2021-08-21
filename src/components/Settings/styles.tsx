@@ -66,3 +66,39 @@ export const Setting = styled.div`
       margin-right: 0.5rem;
   }
 `
+
+export const Credits = styled.div`
+  & {
+    font-family: Minecraft;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 0;
+  }
+
+  & div, & p {
+    padding-right: 0.8rem;
+  }
+
+  & svg {
+    margin-right: 0.3rem;
+  }
+
+  & div * {
+    display: inline;
+    vertical-align: middle;
+  }
+
+  a {
+    color: #cfc;
+    text-decoration: none;
+  }
+
+  code {
+    background-color: #0b2020;
+    border: 1px solid #2a7c7c;
+    padding: 0.2rem;
+    border-radius: 4px;
+    font-family: Minecraft;
+  }
+`

@@ -69,7 +69,7 @@ function createWindow() {
     title: 'No Lye Overlay',
     width: 1100,
     height: 700,
-    minWidth: 800,
+    minWidth: 850,
     minHeight: 400,
     backgroundColor: '#03030F',
     frame: false,
@@ -183,11 +183,11 @@ async function registerListeners() {
     Amazing "testing suite"
     */
    
-    const users = ['WhatsAxis', 'chbv', 'hypixel', 'Shrek', 'Espenode', 'anrie', 'lifelong', 'rrawrxd', 'BlackJaguar', 'xOleg', 'okdub', 'SkywarsKills', 'diboof', 'Lokesnoke', 'chbv', 'MCVisuals', 'Codies', 'Quadrupled', 'the_sad_sea', 'e-asdas87duy90asud0======']
+    // const users = ['WhatsAxis', 'chbv', 'hypixel', 'Shrek', 'Espenode', 'anrie', 'lifelong', 'rrawrxd', 'BlackJaguar', 'xOleg', 'okdub', 'SkywarsKills', 'diboof', 'Lokesnoke', 'chbv', 'MCVisuals', 'Codies', 'Quadrupled', 'the_sad_sea', 'e-asdas87duy90asud0======']
 
-    for (const user of users) {
-      mainWindow?.webContents.send('join', user)
-    }
+    // for (const user of users) {
+    //   mainWindow?.webContents.send('join', user)
+    // }
   })
 
   ipcMain.on('minimize-window', event => {
