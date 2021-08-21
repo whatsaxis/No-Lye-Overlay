@@ -1,237 +1,181 @@
-import { getTitleJSX } from './title'
+import { ColumnImplemenetation } from '../../columns'
+
+import { Tag, ClassTags } from '../../tags'
+
 import {
   calculateLevelFromEXP,
-  roundTo2Digits,
-  commaify,
-  playerDataExists,
+  getRankJSX,
+  _,
 } from '../../helpers'
 
-enum tags {
-  NICK = 'NICK',
-  SNIPER = 'SNPR',
+import { getTitleJSX } from './title'
 
-  EXTREME = 'EXTREME',
-  VERY_HIGH = 'HIGH+',
-  HIGH = 'HIGH',
-  MEDIUM = 'MED',
-  LOW = 'LOW',
-  VERY_LOW = 'LOW-',
-  NONE = '',
-
-  ERROR = 'ERROR',
+enum Column {
+  TAG = 'TAG',
+  NAME = 'NAME',
+  WINS = 'WINS',
+  KILLS = 'KILLS',
+  WLR = 'WLR',
+  KDR = 'KDR',
+  WS = 'WS',
+  BWS = 'BWS',
+  TITLE = 'TITLE',
+  SCORE = 'SCORE',
 }
 
-enum classTags {
-  NICK = 'nick',
-  SNIPER = 'sniper',
+export const columns: { [c: string]: ColumnImplemenetation } = {
+  [Column.TAG]: {
+    displayName: 'Tag',
+    getValue: (stats: any) => {
+      if (stats._internalNick === true) return Tag.NICK
 
-  EXTREME = 'extreme',
-  VERY_HIGH = 'very-high',
-  HIGH = 'high',
-  MEDIUM = 'medium',
-  LOW = 'low',
-  VERY_LOW = 'very-low',
-  NONE = 'none',
+      const wins = _(stats?.player?.stats?.Duels?.wins)
 
-  ERROR = 'error',
-}
+      if (
+        calculateLevelFromEXP(stats?.player?.networkExp) <= 15 &&
+        wins <= 50
+      )
+        return Tag.SNIPER
 
-function filter(playerStats: any) {
-  const duelsStats = playerStats?.player?.stats?.Duels
+      const score = calculateScore(stats)
 
-  return duelsStats
+      if (score < 3) return Tag.NONE
+      if (score <= 5) return Tag.VERY_LOW
+      if (score <= 10) return Tag.LOW
+      if (score <= 15) return Tag.MEDIUM
+      if (score <= 25) return Tag.HIGH
+      if (score <= 50) return Tag.VERY_HIGH
+      if (score > 50) return Tag.EXTREME
+
+      return Tag.ERROR
+    },
+    getClassName: (stats: any) => {
+      if (stats._internalNick === true) return ClassTags.NICK
+
+      const wins = _(stats?.player?.stats?.Duels?.wins)
+
+      if (
+        calculateLevelFromEXP(stats?.player?.networkExp) <= 15 &&
+        wins <= 50
+      )
+        return ClassTags.SNIPER
+
+      const score = calculateScore(stats)
+
+      if (score < 3) return ClassTags.NONE
+      if (score <= 5) return ClassTags.VERY_LOW
+      if (score <= 10) return ClassTags.LOW
+      if (score <= 15) return ClassTags.MEDIUM
+      if (score <= 25) return ClassTags.HIGH
+      if (score <= 50) return ClassTags.VERY_HIGH
+      if (score > 50) return ClassTags.EXTREME
+
+      return ClassTags.ERROR
+    },
+  },
+  [Column.NAME]: {
+    displayName: 'Name',
+    getValue: (stats: any) => {
+      return getRankJSX(stats)
+    },
+  },
+  [Column.WINS]: {
+    displayName: 'Wins',
+    getValue: (stats: any) => {
+      return _(stats?.player?.stats?.Duels?.wins)
+    },
+    thresholds: [500, 1000, 2500, 7500, 12500, 20000],
+    format: true,
+  },
+  [Column.KILLS]: {
+    displayName: 'Kills',
+    getValue: (stats: any) => {
+      return _(stats?.player?.stats?.Duels?.kills)
+    },
+    thresholds: [500, 1000, 2500, 7500, 10000, 17500],
+    format: true,
+  },
+  [Column.WLR]: {
+    displayName: 'WLR',
+    getValue: (stats: any) => {
+      const wins = _(stats?.player?.stats?.Bedwars?.wins_bedwars)
+      const losses = stats?.player?.stats?.Bedwars?.losses_bedwars
+
+      return wins / (losses ? losses : 1)
+    },
+    thresholds: [1, 2.5, 4.5, 6, 12.5, 15],
+    format: true,
+  },
+  [Column.KDR]: {
+    displayName: 'KDR',
+    getValue: (stats: any) => {
+      const kills = _(stats?.player?.stats?.Duels?.kills)
+      const deaths = stats?.player?.stats?.Duels?.deaths
+
+      return kills / (deaths ? deaths : 1)
+    },
+    thresholds: [1.5, 2.5, 4.5, 6, 8.5, 15],
+    format: true,
+  },
+  [Column.WS]: {
+    displayName: 'WS',
+    getValue: (stats: any) => {
+      return _(stats?.player?.stats?.Duels?.current_winstreak)
+    },
+    thresholds: [5, 10, 15, 30, 80, 150],
+    format: true,
+  },
+  [Column.BWS]: {
+    displayName: 'BWS',
+    getValue: (stats: any) => {
+      return _(stats?.player?.stats?.Duels?.best_overall_winstreak)
+    },
+    thresholds: [10, 20, 40, 75, 120, 200],
+    format: true,
+  },
+  [Column.TITLE]: {
+    displayName: 'Title',
+    getValue: (stats: any) => {
+      return getTitleJSX(_(stats?.player?.stats?.Duels?.wins))
+    },
+  },
+  [Column.SCORE]: {
+    displayName: 'Score',
+    getValue: (stats: any) => {
+      return calculateScore(stats)
+    },
+    format: true,
+  },
 }
 
 function calculateScore(stats: any) {
-  const filtered = filter(stats)
-
-  if (filtered === undefined) return null
+  const duelsStats = stats?.player?.stats?.Duels
 
   let score: number = 0
 
-  const wins = filtered.wins ? filtered.wins : 0
-  const kills = filtered.kills ? filtered.kills : 0
-
-  const losses = filtered.losses ? filtered.losses : 1
-  const deaths = filtered.deaths ? filtered.deaths : 1
+  const wins = _(duelsStats?.wins)
+  const losses = duelsStats?.losses
+    ? duelsStats?.losses
+    : 1
 
   const wlr = wins / losses
+
+  const kills = _(duelsStats?.kills)
+  const deaths = duelsStats?.deaths
+    ? duelsStats?.deaths
+    : 1
+
   const kdr = kills / deaths
 
-  if (filtered)
-    score =
-      (wins / losses) *
-      ((wins < 1250 && wlr >= 6) || (wins < 5000 && wlr >= 4.5)
+  /*
+  * Calculating Score
+  * Score = (wins / losses) * (wlr + kdr OR (wlr + kdr) / 3 IF High WLR and low Wins)
+  */
+  if (stats) {
+    score = (wins / losses) * ((wins < 1250 && wlr >= 6) || (wins < 5000 && wlr >= 4.5)
         ? (wlr + kdr) / 3
         : wlr + kdr)
-
-  return { filteredStats: filtered, score: score }
-}
-
-function getRowThreatColors(stats: any) {
-  // Auto-Filters stats
-
-  const filtered = filter(stats)
-
-  let colors = {
-    winsColor: 'none',
-    killsColor: 'none',
-    wlrColor: 'none',
-    kdrColor: 'none',
-    wsColor: 'none',
-    bwsColor: 'none',
   }
 
-  if (!stats._internalNick) {
-    const wins = Number(filtered?.wins)
-    const kills = Number(filtered?.kills)
-
-    const ws = Number(filtered?.current_winstreak)
-    const bws = Number(filtered?.best_overall_winstreak)
-
-    const wlr = filtered?.wins / filtered?.losses
-    const kdr = filtered?.kills / filtered?.deaths
-
-    // Wins
-    if (wins <= 500) colors.winsColor = 'very-low'
-    else if (wins <= 1000) colors.winsColor = 'low'
-    else if (wins <= 2000) colors.winsColor = 'medium'
-    else if (wins <= 7500) colors.winsColor = 'high'
-    else if (wins <= 20000) colors.winsColor = 'very-high'
-    else if (wins > 20000) colors.winsColor = 'extreme'
-
-    // Kills
-    if (kills <= 500) colors.killsColor = 'very-low'
-    else if (kills <= 1000) colors.killsColor = 'low'
-    else if (kills <= 2000) colors.killsColor = 'medium'
-    else if (kills <= 10000) colors.killsColor = 'high'
-    else if (kills <= 20000) colors.killsColor = 'very-high'
-    else if (kills > 20000) colors.killsColor = 'extreme'
-
-    // WLR
-    if (wlr <= 1.5) colors.wlrColor = 'very-low'
-    else if (wlr <= 2.5) colors.wlrColor = 'low'
-    else if (wlr <= 4.5) colors.wlrColor = 'medium'
-    else if (wlr <= 6) colors.wlrColor = 'high'
-    else if (wlr <= 15) colors.wlrColor = 'very-high'
-    else if (wlr > 15) colors.wlrColor = 'extreme'
-
-    // KDR
-    if (kdr <= 1.5) colors.kdrColor = 'very-low'
-    else if (kdr <= 2.5) colors.kdrColor = 'low'
-    else if (kdr <= 4.5) colors.kdrColor = 'medium'
-    else if (kdr <= 6) colors.kdrColor = 'high'
-    else if (kdr <= 15) colors.kdrColor = 'very-high'
-    else if (kdr > 15) colors.kdrColor = 'extreme'
-
-    // WS
-    if (ws <= 5) colors.wsColor = 'very-low'
-    else if (ws <= 10) colors.wsColor = 'low'
-    else if (ws <= 15) colors.wsColor = 'medium'
-    else if (ws <= 30) colors.wsColor = 'high'
-    else if (ws <= 100) colors.wsColor = 'very-high'
-    else if (ws > 100) colors.wsColor = 'extreme'
-
-    // BWS
-    if (bws <= 10) colors.bwsColor = 'very-low'
-    else if (bws <= 20) colors.bwsColor = 'low'
-    else if (bws <= 40) colors.bwsColor = 'medium'
-    else if (bws <= 80) colors.bwsColor = 'high'
-    else if (bws <= 250) colors.bwsColor = 'very-high'
-    else if (bws > 250) colors.bwsColor = 'extreme'
-  }
-
-  return colors
-}
-
-export function getTag(stats: any) {
-  const rowColors = getRowThreatColors(stats)
-
-  const base = {
-    wins: '',
-    kills: '',
-    wlr: '',
-    kdr: '',
-    ws: '',
-    bws: '',
-    score: '',
-    title: '',
-    ...rowColors,
-  }
-
-  if (
-    !/^[a-zA-Z0-9_]*$/.test(stats._internalUsername) ||
-    stats.success === false
-  )
-    return { tag: tags.ERROR, classTag: classTags.ERROR, ...base }
-  if (stats._internalNick === true)
-    return { tag: tags.NICK, classTag: classTags.NICK, ...base }
-
-  if (playerDataExists(stats)) {
-    const scoreFunc = calculateScore(stats)
-
-    // Checking if its null in case none of the stats don't exist
-    if (scoreFunc === null)
-      return { tag: tags.ERROR, classTag: classTags.ERROR, ...base }
-
-    const filteredStats = scoreFunc?.filteredStats
-    const score = scoreFunc?.score
-
-    const wins = filteredStats.wins ? filteredStats.wins : 0
-    const kills = filteredStats.kills ? filteredStats.kills : 0
-
-    const losses = filteredStats.losses ? filteredStats.losses : 1
-    const deaths = filteredStats.deaths ? filteredStats.deaths : 1
-
-    const ws = filteredStats.current_winstreak
-      ? filteredStats.current_winstreak
-      : 0
-    const bws = filteredStats.best_overall_winstreak
-      ? filteredStats.best_overall_winstreak
-      : 0
-
-    const wlr = wins / losses
-    const kdr = kills / deaths
-
-    const title = getTitleJSX(wins)
-
-    // Base object
-    const base2 = {
-      wins: commaify(wins),
-      kills: commaify(kills),
-      wlr: commaify(roundTo2Digits(wlr)),
-      kdr: commaify(roundTo2Digits(kdr)),
-      ws: commaify(ws),
-      bws: commaify(bws),
-      score: commaify(roundTo2Digits(score)),
-      title: title,
-      ...rowColors,
-    }
-
-    // Sniper Check
-    if (wins <= 150 && calculateLevelFromEXP(stats.player.networkExp) <= 15)
-      return {
-        tag: tags.SNIPER,
-        classTag: classTags.SNIPER,
-        ...base2,
-        ...rowColors,
-      }
-
-    // Threat check
-    if (score <= 3)
-      return { tag: tags.NONE, classTag: classTags.NONE, ...base2 }
-    else if (score <= 5)
-      return { tag: tags.VERY_LOW, classTag: classTags.VERY_LOW, ...base2 }
-    else if (score <= 10)
-      return { tag: tags.LOW, classTag: classTags.LOW, ...base2 }
-    else if (score <= 15)
-      return { tag: tags.MEDIUM, classTag: classTags.MEDIUM, ...base2 }
-    else if (score <= 25)
-      return { tag: tags.HIGH, classTag: classTags.HIGH, ...base2 }
-    else if (score <= 50)
-      return { tag: tags.VERY_HIGH, classTag: classTags.VERY_HIGH, ...base2 }
-    else if (score > 50)
-      return { tag: tags.EXTREME, classTag: classTags.EXTREME, ...base2 }
-    else return { tag: tags.ERROR, classTag: classTags.ERROR, ...base2 } // For safety - unlikely this will get executed!
-  }
+  return score
 }

@@ -26,11 +26,48 @@ export function useUsers() {
     useEffect(() => {
         window.Main.on('server_change', (e: Electron.IpcRendererEvent) => {
             clearUsers()
-            console.log('--------------------')
+            console.log('════════════ Server Change ════════════')
         })
 
-        window.Main.on('who', (e: Electron.IpcRendererEvent, users: string[]) => {
+        window.Main.on('who', async (e: Electron.IpcRendererEvent, Users: string[]) => {
             console.log('Used /who')
+            for (const u of Users) {
+                if (users.includes(u)) continue
+                let stats: LooseObject = {}
+
+                let uuid
+                let nick = false
+
+                if (includes(u)) {
+                    uuid = get(u)
+                    console.log('Fetched ' + useContext + "'s UUID from cache.")
+                } else {
+                    const userIsNick: boolean = await api.checkNick(u)
+                    console.log(`Checked if ${ u } is a nicked player. [${ userIsNick }]`)
+    
+                    nick = true
+                    if (!userIsNick) {
+                        nick = false
+    
+                        uuid = await api.getUUID(u)
+                        console.log('Fetched ' + u + "'s UUID.")
+                        add({ username: u, uuid: uuid })
+                    }
+                }
+    
+                if (!nick) {
+                    stats = await api.getStats(uuid)
+                    console.log('Fetched ' + u + "'s stats.")
+                }
+    
+    
+                // Adding custom property for username, so that
+                // we know the name of nicks and we can display it
+                stats._internalUsername = u
+                stats._internalNick = nick
+    
+                setUsers(u => [...u, stats])
+            }
         })
 
         window.Main.on('join', async (e: Electron.IpcRendererEvent, user: string) => {

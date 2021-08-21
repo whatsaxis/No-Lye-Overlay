@@ -4,9 +4,6 @@ import { Tag, ClassTags } from '../../tags'
 
 import {
   calculateLevelFromEXP,
-  roundTo2Digits,
-  commaify,
-  playerDataExists,
   getRankJSX,
   _,
 } from '../../helpers'
@@ -53,7 +50,7 @@ export const columns: { [c: string]: ColumnImplemenetation } = {
       if (index <= 3500) return Tag.MEDIUM
       if (index <= 8500) return Tag.HIGH
       if (index <= 17500) return Tag.VERY_HIGH
-      if (index > 35000) return Tag.EXTREME
+      if (index > 17500) return Tag.EXTREME
 
       return Tag.ERROR
     },
@@ -82,7 +79,7 @@ export const columns: { [c: string]: ColumnImplemenetation } = {
       if (index <= 3500) return ClassTags.MEDIUM
       if (index <= 8500) return ClassTags.HIGH
       if (index <= 17500) return ClassTags.VERY_HIGH
-      if (index > 35000) return ClassTags.EXTREME
+      if (index > 17500) return ClassTags.EXTREME
 
       return ClassTags.ERROR
     },

@@ -65,7 +65,8 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    icon: path.join(__dirname, '../assets', 'icon.png'), // TODO fix this
+    icon: path.join(__dirname, '../assets', 'icon.png'),
+    title: 'No Lye Overlay',
     width: 1100,
     height: 700,
     minWidth: 800,
@@ -94,8 +95,6 @@ function createWindow() {
 }
 
 async function startLogging() {
-  console.log("A")
-
   // Reset logging
   logFileReadline?.close()
   logFileReadline = null
@@ -114,7 +113,6 @@ async function startLogging() {
   })
 
   if (logFileTail !== null) {
-    console.log("B")
     await logFileTail.start()
 
     console.log()
@@ -138,7 +136,7 @@ async function startLogging() {
           }
     
           if (/^ONLINE: ((?:(?:\[[A-Z+]+\] )?[A-Za-z0-9_]{1,16}(?:, )?)+)$/.test(log)) {
-            console.log('User /who!')
+            console.log('Used /who!')
             const list = message.split(': ')[1]
             const users = list.split(', ')
 

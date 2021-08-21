@@ -4,16 +4,12 @@ import styled from 'styled-components'
 // TODO
 
 export const SettingsStyles = styled.div`
-  div.setting {
-      
+  & {
+    margin-left: 1rem;
   }
 
-  div.setting:hover {
-      
-  }
-
-  div.setting label {
-      
+  h1 {
+    text-align: center;
   }
 
   input[type=text], select, div.validity {
