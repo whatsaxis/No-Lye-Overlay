@@ -1,6 +1,7 @@
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
-} from 'electron-devtools-installer' // Remove in production
+} from 'electron-devtools-installer'
+
 import { app, BrowserWindow, ipcMain } from 'electron'
 
 const Store = require('electron-store')
@@ -9,6 +10,8 @@ import TailFile from '@logdna/tail-file'
 
 import { Installation, StorageKey } from './settings'
 import { getGameDirectory } from './helpers'
+
+const isDev = require('electron-is-dev')
 
 /*
 File stuff
@@ -23,11 +26,11 @@ export const logsPath = path.join(require('minecraft-folder-path'), 'logs')
 // Initialize Storage
 
 const schema = {
-  username: {
+  'username': {
     type: 'string',
     default: '',
   },
-  client: {
+  'client': {
     type: 'string',
     default: 'none',
   },
@@ -57,11 +60,6 @@ let mainWindow: BrowserWindow | null
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
-
-// const assetsPath =
-//   process.env.NODE_ENV === 'production'
-//     ? process.resourcesPath
-//     : app.getAppPath()
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -266,7 +264,7 @@ async function registerListeners() {
     .on('ready', createWindow)
     .whenReady()
     .then(registerListeners)
-    .then(installReactDevTools) // Remove in production
+    .then(isDev ? installReactDevTools : () => {})
     .catch(e => console.error(e))
 
   app.on('window-all-closed', () => {
