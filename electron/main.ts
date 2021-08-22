@@ -1,6 +1,6 @@
-import installExtension, {
-  REACT_DEVELOPER_TOOLS,
-} from 'electron-devtools-installer'
+// import installExtension, {
+//   REACT_DEVELOPER_TOOLS,
+// } from 'electron-devtools-installer'
 
 import { app, BrowserWindow, ipcMain } from 'electron'
 
@@ -10,8 +10,6 @@ import TailFile from '@logdna/tail-file'
 
 import { Installation, StorageKey } from './settings'
 import { getGameDirectory } from './helpers'
-
-const isDev = require('electron-is-dev')
 
 /*
 File stuff
@@ -90,6 +88,10 @@ function createWindow() {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  process.on('uncaughtException', function (error) {
+    mainWindow?.webContents.executeJavaScript(`console.log(${error})`)
+  })
 }
 
 async function startLogging() {
@@ -112,8 +114,6 @@ async function startLogging() {
 
   if (logFileTail !== null) {
     await logFileTail.start()
-
-    console.log()
 
     logFileReadline.on('line', (log) => {
       console.log(log)
@@ -254,17 +254,17 @@ async function registerListeners() {
   }
 }
 
-  function installReactDevTools() {
-    installExtension(REACT_DEVELOPER_TOOLS)
-      .then(name => console.log(`Added Extension:  ${name}`))
-      .catch(err => console.log('An error occurred: ', err))
-  }
+  // function installReactDevTools() {
+  //   installExtension(REACT_DEVELOPER_TOOLS)
+  //     .then(name => console.log(`Added Extension:  ${name}`))
+  //     .catch(err => console.log('An error occurred: ', err))
+  // }
 
   app
     .on('ready', createWindow)
     .whenReady()
     .then(registerListeners)
-    .then(isDev ? installReactDevTools : () => {})
+    // .then(isDev ? installReactDevTools : () => {})
     .catch(e => console.error(e))
 
   app.on('window-all-closed', () => {

@@ -32,8 +32,7 @@ export class API {
     const res = await fetch(`https://api.ashcon.app/mojang/v2/user/${username}`)
       .then(data => data.json())
 
-    if (res.code === 404) return true
-    if (res.code === 400) return null
+    if (res.code === 404 && res.code === 400) return true
     return false
   }
 
