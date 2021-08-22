@@ -8,7 +8,7 @@ to see the stats of users in your pregame lobby. This is useful in many situatio
 
 <h2 align="center">Installation 💿</h2>
 <ol align="center">
-    <li>Download the latest release from <a href="https://github.com/No-Lye-Overlay/releases">releases</a></li>
+    <li>Download the latest release from <a href="https://github.com/whatsaxis/No-Lye-Overlay/releases">releases</a></li>
     <li>Run the <code>No Lye Overlay [VERSION].exe</code> file</li>
     <li>Enter your settings in the settings menu, such as your API Key (read further down on how to obtain one), and client</li>
     <li>Enjoy!</li>
