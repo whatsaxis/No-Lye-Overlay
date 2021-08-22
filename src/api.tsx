@@ -1,3 +1,6 @@
+import UnknownFace from '../assets/images/Overlays/unknown.png'
+
+
 export class API {
   key: string
 
@@ -30,7 +33,20 @@ export class API {
       .then(data => data.json())
 
     if (res.code === 404) return true
+    if (res.code === 400) return null
     return false
+  }
+
+  async getSkinImage(username: string, size: number) {
+    if (await this.checkNick(username)) return <img src={ UnknownFace } height={ size } />
+    const uuid = await this.getUUID(username)
+    const face = await fetch(`https://crafatar.com/avatars/${ uuid }`)
+
+    if (face.ok === true && face.status === 200) {
+      return <img src={ face.url } height={ size } />
+    }
+
+    return <img src={ UnknownFace } height={ size } />
   }
 
   async getStats(uuid: string) {

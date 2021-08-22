@@ -1,5 +1,5 @@
 import { useUsers } from '../../useUsers'
-import { getRankJSX, checkSettings } from '../../helpers'
+import { checkSettings } from '../../helpers'
 
 import { columns } from './tags'
 import { generateFirstRow, parseColumns } from '../../columns'

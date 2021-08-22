@@ -42,11 +42,11 @@ export function useUsers() {
                     uuid = get(u)
                     console.log('Fetched ' + useContext + "'s UUID from cache.")
                 } else {
-                    const userIsNick: boolean = await api.checkNick(u)
+                    const userIsNick: boolean | null = await api.checkNick(u)
                     console.log(`Checked if ${ u } is a nicked player. [${ userIsNick }]`)
     
                     nick = true
-                    if (!userIsNick) {
+                    if (userIsNick === false) {
                         nick = false
     
                         uuid = await api.getUUID(u)
@@ -65,6 +65,9 @@ export function useUsers() {
                 // we know the name of nicks and we can display it
                 stats._internalUsername = u
                 stats._internalNick = nick
+                stats._internalSkin = await api.getSkinImage(u, 25)
+                
+                console.log(stats._internalSkin)
     
                 setUsers(u => [...u, stats])
             }
@@ -80,11 +83,11 @@ export function useUsers() {
                 uuid = get(user)
                 console.log('Fetched ' + user + "'s UUID from cache.")
             } else {
-                const userIsNick: boolean = await api.checkNick(user)
+                const userIsNick: boolean | null = await api.checkNick(user)
                 console.log(`Checked if ${ user } is a nicked player. [${ userIsNick }]`)
 
                 nick = true
-                if (!userIsNick) {
+                if (userIsNick === false) {
                     nick = false
 
                     uuid = await api.getUUID(user)
@@ -103,6 +106,9 @@ export function useUsers() {
             // we know the name of nicks and we can display it
             stats._internalUsername = user
             stats._internalNick = nick
+            stats._internalSkin = await api.getSkinImage(user, 25)
+
+            console.log(stats._internalSkin)
 
             setUsers(u => [...u, stats])
         })
@@ -119,6 +125,7 @@ export function useUsers() {
 
         return () => {
             window.Main.removeListener('server_change')
+            window.Main.removeListener('who')
             window.Main.removeListener('join')
             window.Main.removeListener('leave')
         }

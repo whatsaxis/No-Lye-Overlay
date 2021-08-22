@@ -65,9 +65,9 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     icon: path.join(__dirname, '../assets', 'icon.png'),
     title: 'No Lye Overlay',
-    width: 1100,
+    width: 1250,
     height: 700,
-    minWidth: 850,
+    minWidth: 1250,
     minHeight: 400,
     backgroundColor: '#03030F',
     frame: false,

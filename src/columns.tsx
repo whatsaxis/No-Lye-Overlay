@@ -41,12 +41,12 @@ export function parseColumns(stats: any, columns: Record<string, ColumnImplemene
         if (column.thresholds !== undefined) {
             const thresholdMap = column.thresholds.map((threshold, i) => [threshold, i + 1])
 
-            console.log(thresholdMap)
+            // console.log(thresholdMap)
 
             for (const [threshold, i] of thresholdMap.reverse()) {
-                console.log(threshold)
-                console.log(i)
-                console.log(threatLevelList)
+                // console.log(threshold)
+                // console.log(i)
+                // console.log(threatLevelList)
                 if (value >= threshold) {
                     bracket = threatLevelList[i as number]
                     break

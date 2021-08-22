@@ -11,6 +11,7 @@ import {
 import { getStarJSX } from './stars'
 
 enum Column {
+  HEAD = 'HEAD',
   TAG = 'TAG',
   NAME = 'NAME',
   WINS = 'WINS',
@@ -23,6 +24,12 @@ enum Column {
 }
 
 export const columns: { [c: string]: ColumnImplemenetation } = {
+  [Column.HEAD]: {
+    displayName: '',
+    getValue: (stats: any) => {
+      return stats._internalSkin
+    }
+  },
   [Column.TAG]: {
     displayName: 'Tag',
     getValue: (stats: any) => {
