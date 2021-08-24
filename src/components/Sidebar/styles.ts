@@ -5,12 +5,18 @@ export const SidebarStyles = styled.nav`
     & {
         display: inline-block;
         background-color: #171717;
-        height: 100vw;
+        height: 100%;
         padding: 0.4rem;
 
         margin-right: 0.25rem;
 
         float: left;
+    }
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     li {
@@ -30,22 +36,23 @@ export const SidebarStyles = styled.nav`
 
 export const Icon = styled.img`
     & {
-        height: 30px;
-        width: 30px;
+        height: 35px;
+        width: 35px;
 
-        margin-bottom: 0.5rem;
+        margin-bottom: 1rem;
     }
 `
 
 // https://stackoverflow.com/questions/13596821/css-align-images-and-text-on-same-line
 export const SidebarRoute = styled.li`
     & {
-        width: 100%;
-        padding: 0.15rem;
         display: flex;
         justify-content: center;
         align-items: center;
         height: 30px;
+        width: 30px;
+
+        margin-bottom: 0.5rem;
     }
 
     & > * {

@@ -1,8 +1,6 @@
 import styled from 'styled-components'
 
 
-// TODO
-
 export const SettingsStyles = styled.div`
   & {
     margin-left: 1rem;
@@ -69,11 +67,13 @@ export const Setting = styled.div`
 
 export const Credits = styled.div`
   & {
+    position: absolute;
     font-family: Minecraft;
     display: flex;
     justify-content: center;
     align-items: center;
     bottom: 0;
+    right: 0;
   }
 
   & div, & p {

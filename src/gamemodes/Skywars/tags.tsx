@@ -8,6 +8,8 @@ import {
 } from '../../helpers'
 
 import { getStarJSX } from './stars'
+import { Player } from '../../useUsers'
+
 
 enum Column {
   HEAD = 'HEAD',
@@ -25,16 +27,16 @@ enum Column {
 export const columns: { [c: string]: ColumnImplemenetation } = {
   [Column.HEAD]: {
     displayName: '',
-    getValue: (stats: any) => {
-      return stats._internalSkin
+    getValue: (player: Player) => {
+      return player.skin
     }
   },
   [Column.TAG]: {
     displayName: 'Tag',
-    getValue: (stats: any) => {
-      if (stats._internalNick === true) return Tag.NICK
+    getValue: (player: Player) => {
+      if (player.nick === true) return Tag.NICK
 
-      const score = calculateScore(stats)
+      const score = calculateScore(player)
 
       if (score < 0.2) return Tag.NONE
       if (score <= 0.6) return Tag.VERY_LOW
@@ -46,10 +48,10 @@ export const columns: { [c: string]: ColumnImplemenetation } = {
 
       return Tag.ERROR
     },
-    getClassName: (stats: any) => {
-      if (stats._internalNick === true) return ClassTags.NICK
+    getClassName: (player: Player) => {
+      if (player.nick === true) return ClassTags.NICK
 
-      const score = calculateScore(stats)
+      const score = calculateScore(player)
 
       if (score < 0.2) return ClassTags.NONE
       if (score <= 0.6) return ClassTags.VERY_LOW
@@ -64,31 +66,31 @@ export const columns: { [c: string]: ColumnImplemenetation } = {
   },
   [Column.NAME]: {
     displayName: 'Name',
-    getValue: (stats: any) => {
-      return getRankJSX(stats)
+    getValue: (player: Player) => {
+      return getRankJSX(player)
     },
   },
   [Column.WINS]: {
     displayName: 'Wins',
-    getValue: (stats: any) => {
-      return _(stats?.player?.stats?.SkyWars?.wins)
+    getValue: (player: Player) => {
+      return _(player.stats?.player?.stats?.SkyWars?.wins)
     },
     thresholds: [100, 500, 2500, 5000, 8000, 12500],
     format: true,
   },
   [Column.KILLS]: {
     displayName: 'Kills',
-    getValue: (stats: any) => {
-      return _(stats?.player?.stats?.SkyWars?.kills)
+    getValue: (player: Player) => {
+      return _(player.stats?.player?.stats?.SkyWars?.kills)
     },
     thresholds: [500, 1000, 5000, 15000, 30000, 75000],
     format: true,
   },
   [Column.WLR]: {
     displayName: 'WLR',
-    getValue: (stats: any) => {
-      const wins = _(stats?.player?.stats?.SkyWars?.wins)
-      const losses = stats?.player?.stats?.SkyWars?.losses
+    getValue: (player: Player) => {
+      const wins = _(player.stats?.player?.stats?.SkyWars?.wins)
+      const losses = player.stats?.player?.stats?.SkyWars?.losses
 
       return wins / (losses ? losses : 1)
     },
@@ -97,9 +99,9 @@ export const columns: { [c: string]: ColumnImplemenetation } = {
   },
   [Column.KDR]: {
     displayName: 'KDR',
-    getValue: (stats: any) => {
-      const kills = _(stats?.player?.stats?.SkyWars?.kills)
-      const deaths = stats?.player?.stats?.SkyWars?.deaths
+    getValue: (player: Player) => {
+      const kills = _(player.stats?.player?.stats?.SkyWars?.kills)
+      const deaths = player.stats?.player?.stats?.SkyWars?.deaths
 
       return kills / (deaths ? deaths : 1)
     },
@@ -108,29 +110,29 @@ export const columns: { [c: string]: ColumnImplemenetation } = {
   },
   [Column.WS]: {
     displayName: 'WS',
-    getValue: (stats: any) => {
-      return _(stats?.player?.stats?.SkyWars?.win_streak)
+    getValue: (player: Player) => {
+      return _(player.stats?.player?.stats?.SkyWars?.win_streak)
     },
     thresholds: [1, 3, 5, 8, 15, 25],
     format: true,
   },
   [Column.STAR]: {
     displayName: 'Star',
-    getValue: (stats: any) => {
-      return getStarJSX(stats?.player?.stats?.SkyWars?.levelFormatted)
+    getValue: (player: Player) => {
+      return getStarJSX(player.stats?.player?.stats?.SkyWars?.levelFormatted)
     },
   },
   [Column.SCORE]: {
     displayName: 'Score',
-    getValue: (stats: any) => {
-      return calculateScore(stats)
+    getValue: (player: Player) => {
+      return calculateScore(player)
     },
     format: true,
   },
 }
 
-function calculateScore(stats: any) {
-  const skywarsStats = stats?.player?.stats?.SkyWars
+function calculateScore(player: Player) {
+  const skywarsStats = player.stats?.player?.stats?.SkyWars
 
   let score: number = 0
 
@@ -152,7 +154,7 @@ function calculateScore(stats: any) {
   * Calculating Score
   * Score = (wins / losses) * ((WLR * 3) + (KDR * 2))
   */
-  if (stats) score = (wins / losses) * ((wlr * 3) + (kdr * 2))
+  if (player.nick === false) score = (wins / losses) * ((wlr * 3) + (kdr * 2))
 
   return score
 }

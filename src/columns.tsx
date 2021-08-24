@@ -1,5 +1,6 @@
 import { ThreatLevels, threatLevelList } from './tags'
 import { commaify, roundTo2Digits } from './helpers'
+import { Player } from './useUsers'
 
 
 export type ColumnImplemenetation = {
@@ -21,32 +22,27 @@ export function generateFirstRow(columns: { [c: string]: ColumnImplemenetation }
     return (
         <tr>
             {
-                Object.values(columns).map(column => <td>{ column.displayName }</td>)
+                Object.values(columns).map(column => <td key={ column.displayName }>{ column.displayName }</td>)
             }
         </tr>
     )
 }
 
-export function parseColumns(stats: any, columns: Record<string, ColumnImplemenetation>) {
+export function parseColumns(player: Player, columns: Record<string, ColumnImplemenetation>) {
     const dataValues = Object.values(columns).map(column => {
         let bracket: string = ThreatLevels.NONE
         let className: string | null = null
 
-        const value = column.getValue(stats)
+        const value = column.getValue(player)
         
         if (column.getClassName !== undefined) {
-            className = column.getClassName(stats)
+            className = column.getClassName(player)
         }
 
         if (column.thresholds !== undefined) {
             const thresholdMap = column.thresholds.map((threshold, i) => [threshold, i + 1])
 
-            // console.log(thresholdMap)
-
             for (const [threshold, i] of thresholdMap.reverse()) {
-                // console.log(threshold)
-                // console.log(i)
-                // console.log(threatLevelList)
                 if (value >= threshold) {
                     bracket = threatLevelList[i as number]
                     break
@@ -55,7 +51,7 @@ export function parseColumns(stats: any, columns: Record<string, ColumnImplemene
         }
 
         return (
-            <td className={ [bracket, className].join(" ") }>
+            <td className={ [bracket, className].join(" ") } key={ column.displayName }>
                 {
                     column.format === true ?
                     commaify(roundTo2Digits(value))

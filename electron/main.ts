@@ -54,10 +54,24 @@ let logFileReadline: readline.Interface | null = null
 
 // Initialize Electron Window
 
-let mainWindow: BrowserWindow | null
+let mainWindow: BrowserWindow | null = null
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string
+
+
+const gotTheLock = app.requestSingleInstanceLock()
+    
+if (!gotTheLock) {
+  app.quit()
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
+    }
+  })
+}
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -65,8 +79,8 @@ function createWindow() {
     title: 'No Lye Overlay',
     width: 1250,
     height: 700,
-    minWidth: 1250,
-    minHeight: 400,
+    minWidth: 600,
+    minHeight: 600,
     backgroundColor: '#03030F',
     frame: false,
     show: false,
@@ -119,7 +133,7 @@ async function startLogging() {
       console.log(log)
       setImmediate(() => {
         if (/\[[^]*\] \[Client thread\/INFO\]: \[CHAT\] [^]*/.test(log)) {
-          console.log(log)
+          // console.log(log)
     
           const message = log.split('[CHAT] ')[1].trim()
     
@@ -133,7 +147,7 @@ async function startLogging() {
             mainWindow?.webContents.send('server_change')
           }
     
-          if (/^ONLINE: ((?:(?:\[[A-Z+]+\] )?[A-Za-z0-9_]{1,16}(?:, )?)+)$/.test(log)) {
+          if (/^ONLINE: ((?:(?:\[[A-Z+]+\] )?[A-Za-z0-9_]{1,16}(?:, )?)+)$/.test(message)) {
             console.log('Used /who!')
             const list = message.split(': ')[1]
             const users = list.split(', ')

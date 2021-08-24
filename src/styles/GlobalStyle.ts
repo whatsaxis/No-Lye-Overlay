@@ -34,7 +34,6 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 16px;
     background-color: var(--theme-color);
     opacity: 0.6;
-    overflow: hidden;
   }
 
   p, h1, h2, h3, h4, h5, h6, li, label, div, img, br {
@@ -71,6 +70,27 @@ export const GlobalStyle = createGlobalStyle`
 
   tr:first-of-type {
     font-weight: bold;
+  }
+
+  @media only screen and (max-width: 900px) {
+      td {
+        padding: 0.25rem;
+        padding-left: 1.75rem;
+      }
+  }
+
+  @media only screen and (max-width: 850px) {
+    td {
+      padding: 0.22rem;
+      padding-left: 1.25rem;
+    }
+  }
+
+  @media only screen and (max-width: 750px) {
+    td {
+      padding: 0.2rem;
+      padding-left: 1rem;
+    }
   }
 
   // Table Color Styles
@@ -121,6 +141,27 @@ export const GlobalStyle = createGlobalStyle`
     color: #F51D1D !important;
   }
 
+  // Scroll bar
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    background-color: var(--theme-color);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 8px;
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #777;
+  }
+
   // Misc. Styles
 
   .inline-children > * {
@@ -145,6 +186,10 @@ export const GlobalStyle = createGlobalStyle`
 `
 
 export const Wrapper = styled.div`
+  & {
+    height: 100%;
+  }
+
   & > div {
     display: inline;
   }

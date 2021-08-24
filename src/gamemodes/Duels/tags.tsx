@@ -8,7 +8,9 @@ import {
   _,
 } from '../../helpers'
 
+import { Player } from '../../useUsers'
 import { getTitleJSX } from './title'
+
 
 enum Column {
   HEAD = 'HEAD',
@@ -27,24 +29,24 @@ enum Column {
 export const columns: { [c: string]: ColumnImplemenetation } = {
   [Column.HEAD]: {
     displayName: '',
-    getValue: (stats: any) => {
-      return stats._internalSkin
+    getValue: (player: Player) => {
+      return player.skin
     }
   },
   [Column.TAG]: {
     displayName: 'Tag',
-    getValue: (stats: any) => {
-      if (stats._internalNick === true) return Tag.NICK
+    getValue: (player: Player) => {
+      if (player.nick === true) return Tag.NICK
 
-      const wins = _(stats?.player?.stats?.Duels?.wins)
+      const wins = _(player.stats?.player?.stats?.Duels?.wins)
 
       if (
-        calculateLevelFromEXP(stats?.player?.networkExp) <= 15 &&
+        calculateLevelFromEXP(player.stats?.player?.networkExp) <= 15 &&
         wins <= 50
       )
         return Tag.SNIPER
 
-      const score = calculateScore(stats)
+      const score = calculateScore(player)
 
       if (score < 3) return Tag.NONE
       if (score <= 5) return Tag.VERY_LOW
@@ -56,18 +58,18 @@ export const columns: { [c: string]: ColumnImplemenetation } = {
 
       return Tag.ERROR
     },
-    getClassName: (stats: any) => {
-      if (stats._internalNick === true) return ClassTags.NICK
+    getClassName: (player: Player) => {
+      if (player.nick === true) return ClassTags.NICK
 
-      const wins = _(stats?.player?.stats?.Duels?.wins)
+      const wins = _(player.stats?.player?.stats?.Duels?.wins)
 
       if (
-        calculateLevelFromEXP(stats?.player?.networkExp) <= 15 &&
+        calculateLevelFromEXP(player.stats?.player?.networkExp) <= 15 &&
         wins <= 50
       )
         return ClassTags.SNIPER
 
-      const score = calculateScore(stats)
+      const score = calculateScore(player)
 
       if (score < 3) return ClassTags.NONE
       if (score <= 5) return ClassTags.VERY_LOW
@@ -82,31 +84,31 @@ export const columns: { [c: string]: ColumnImplemenetation } = {
   },
   [Column.NAME]: {
     displayName: 'Name',
-    getValue: (stats: any) => {
-      return getRankJSX(stats)
+    getValue: (player: Player) => {
+      return getRankJSX(player)
     },
   },
   [Column.WINS]: {
     displayName: 'Wins',
-    getValue: (stats: any) => {
-      return _(stats?.player?.stats?.Duels?.wins)
+    getValue: (player: Player) => {
+      return _(player.stats?.player?.stats?.Duels?.wins)
     },
     thresholds: [500, 1000, 2500, 7500, 12500, 20000],
     format: true,
   },
   [Column.KILLS]: {
     displayName: 'Kills',
-    getValue: (stats: any) => {
-      return _(stats?.player?.stats?.Duels?.kills)
+    getValue: (player: Player) => {
+      return _(player.stats?.player?.stats?.Duels?.kills)
     },
     thresholds: [500, 1000, 2500, 7500, 10000, 17500],
     format: true,
   },
   [Column.WLR]: {
     displayName: 'WLR',
-    getValue: (stats: any) => {
-      const wins = _(stats?.player?.stats?.Bedwars?.wins_bedwars)
-      const losses = stats?.player?.stats?.Bedwars?.losses_bedwars
+    getValue: (player: Player) => {
+      const wins = _(player.stats?.player?.stats?.Bedwars?.wins_bedwars)
+      const losses = player.stats?.player?.stats?.Bedwars?.losses_bedwars
 
       return wins / (losses ? losses : 1)
     },
@@ -115,9 +117,9 @@ export const columns: { [c: string]: ColumnImplemenetation } = {
   },
   [Column.KDR]: {
     displayName: 'KDR',
-    getValue: (stats: any) => {
-      const kills = _(stats?.player?.stats?.Duels?.kills)
-      const deaths = stats?.player?.stats?.Duels?.deaths
+    getValue: (player: Player) => {
+      const kills = _(player.stats?.player?.stats?.Duels?.kills)
+      const deaths = player.stats?.player?.stats?.Duels?.deaths
 
       return kills / (deaths ? deaths : 1)
     },
@@ -126,37 +128,37 @@ export const columns: { [c: string]: ColumnImplemenetation } = {
   },
   [Column.WS]: {
     displayName: 'WS',
-    getValue: (stats: any) => {
-      return _(stats?.player?.stats?.Duels?.current_winstreak)
+    getValue: (player: Player) => {
+      return _(player.stats?.player?.stats?.Duels?.current_winstreak)
     },
     thresholds: [5, 10, 15, 30, 80, 150],
     format: true,
   },
   [Column.BWS]: {
     displayName: 'BWS',
-    getValue: (stats: any) => {
-      return _(stats?.player?.stats?.Duels?.best_overall_winstreak)
+    getValue: (player: Player) => {
+      return _(player.stats?.player?.stats?.Duels?.best_overall_winstreak)
     },
     thresholds: [10, 20, 40, 75, 120, 200],
     format: true,
   },
   [Column.TITLE]: {
     displayName: 'Title',
-    getValue: (stats: any) => {
-      return getTitleJSX(_(stats?.player?.stats?.Duels?.wins))
+    getValue: (player: Player) => {
+      return getTitleJSX(_(player.stats?.player?.stats?.Duels?.wins))
     },
   },
   [Column.SCORE]: {
     displayName: 'Score',
-    getValue: (stats: any) => {
-      return calculateScore(stats)
+    getValue: (player: Player) => {
+      return calculateScore(player)
     },
     format: true,
   },
 }
 
-function calculateScore(stats: any) {
-  const duelsStats = stats?.player?.stats?.Duels
+function calculateScore(player: Player) {
+  const duelsStats = player.stats?.player?.stats?.Duels
 
   let score: number = 0
 
@@ -178,7 +180,7 @@ function calculateScore(stats: any) {
   * Calculating Score
   * Score = (wins / losses) * (wlr + kdr OR (wlr + kdr) / 3 IF High WLR and low Wins)
   */
-  if (stats) {
+  if (player.nick === false) {
     score = (wins / losses) * ((wins < 1250 && wlr >= 6) || (wins < 5000 && wlr >= 4.5)
         ? (wlr + kdr) / 3
         : wlr + kdr)

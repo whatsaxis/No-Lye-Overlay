@@ -1,18 +1,19 @@
 import { useContext } from 'react'
 
-import { OverlayContext } from "../../App"
+import { OverlayContext } from '../../App'
 
+import { OverlayStyles } from './styles'
 
 const Overlay: React.FC = () => {
     const context = useContext(OverlayContext);
 
     return (
-        <div style={{ color: '#fff' }}>
+        <OverlayStyles>
 
             { context[0].component }
 
-        </div>
+        </OverlayStyles>
     );
 }
  
-export default Overlay;
+export default Overlay

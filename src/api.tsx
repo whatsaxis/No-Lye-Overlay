@@ -8,18 +8,6 @@ export class API {
     this.key = key
   }
 
-  set setKey(key: string) {
-    this.key = key
-  }
-
-  async getUUID(username: string) {
-    const res = await fetch(`https://api.ashcon.app/mojang/v2/user/${username}`)
-    .then(data => data.json())
-    .then(data => data.uuid)
-
-    return res
-  }
-
   async checkAPIKey(key: string) {
     const res = await fetch(`https://api.hypixel.net/key?key=${key}`)
     .then(data => data.json())
@@ -28,18 +16,21 @@ export class API {
     return res
   }
 
-  async checkNick(username: string) {
+  async checkNickOrUUID(username: string) {
     const res = await fetch(`https://api.ashcon.app/mojang/v2/user/${username}`)
       .then(data => data.json())
 
-    if (res.code === 404 && res.code === 400) return true
-    return false
+    console.log(`Called checkNickOrUUID [${ res.code === 404 || res.code === 400 ? true : res.uuid }]`)
+
+    if (res.code === 404 || res.code === 400) return true
+    return res.uuid
   }
 
-  async getSkinImage(username: string, size: number) {
-    if (await this.checkNick(username)) return <img src={ UnknownFace } height={ size } />
-    const uuid = await this.getUUID(username)
+  async getSkinImage(uuid: string | null, size: number) {
+    if (uuid === null) return <img src={ UnknownFace } height={ size } />
     const face = await fetch(`https://crafatar.com/avatars/${ uuid }`)
+
+    console.log(`https://crafatar.com/avatars/${ uuid }`)
 
     if (face.ok === true && face.status === 200) {
       return <img src={ face.url } height={ size } />
@@ -49,8 +40,8 @@ export class API {
   }
 
   async getStats(uuid: string) {
-    const url = `https://api.hypixel.net/player?uuid=${uuid}&key=${this.key}`
-
+    const url = `https://api.hypixel.net/player?uuid=${ uuid }&key=${ this.key }`
+    console.log(url)
     let stats = await fetch(url).then(data => data.json())
 
     return stats

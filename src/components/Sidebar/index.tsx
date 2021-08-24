@@ -21,7 +21,7 @@ const Sidebar: React.FC = () => {
                     <SidebarRoute key={ route.name } className={ route.name === selected ? 'selected' : '' } onClick={ () => {
                         context[1](route)
                         setSelected(route.name)
-                    } }><img src={ route.icon } height="18px" /></SidebarRoute>)
+                    } }><img src={ route.icon } height="24px" width="24px" /></SidebarRoute>)
                 }
             </ul>
         </SidebarStyles>  
