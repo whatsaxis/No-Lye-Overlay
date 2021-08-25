@@ -115,8 +115,26 @@ const Settings: React.FC = () => {
         />
       </Setting>
 
+      <h2>Appearance</h2>
+      <Setting>
+        <label>Transparency</label>
+        <input
+          name="transparency"
+          type="range"
+          defaultValue={ Number(window.Main.getSetting('transparency')) * 100 }
+          min={ 30 }
+          max={ 100 }
+          onChange={ async e => {
+            const transparency = Number(e.target.value) / 100
+
+            console.log(transparency)
+            window.Main.setTransparency(transparency)
+            window.Main.setSetting({ name: 'transparency', value: transparency })
+          } }
+        />
+      </Setting>
+
       <h2>Log File</h2>
-      <br />
 
       <Setting className="inline-children">
         <label>Client</label>

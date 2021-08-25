@@ -31,6 +31,7 @@ export const SidebarStyles = styled.nav`
 
     .selected {
         background-color: #3e424b;
+        border-radius: 6px;
     }
 `
 
@@ -67,5 +68,6 @@ export const SidebarRoute = styled.li`
     &:hover {
         cursor: pointer;
         background-color: #3e424b;
+        border-radius: 6px;
     }
 `

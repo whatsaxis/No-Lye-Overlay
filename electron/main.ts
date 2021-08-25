@@ -36,6 +36,12 @@ const schema = {
     type: 'string',
     default: '',
   },
+  'transparency': {
+    type: 'number',
+    maximum: 1,
+		minimum: 0,
+		default: 0.9
+  }
 }
 
 /*
@@ -93,7 +99,7 @@ function createWindow() {
   })
 
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
-  mainWindow.setOpacity(0.9)
+  mainWindow.setOpacity(storage.get('transparency'))
 
   mainWindow.once('ready-to-show', () => {
     mainWindow?.show()
@@ -251,13 +257,19 @@ async function registerListeners() {
         break
       case 'pvplounge':
         exists = await checkIfExists(path.join(logsPath, '../../.pvplounge/logs'))
-        event.reply('check-game-dir-reply', exists)
+        event.reply('check-game-dir-reply', exists) 
         break
     }
   })
 
   ipcMain.on('get-game-dir', async (event, installation: Installation) => {
     event.reply('get-game-dir-reply', getGameDirectory(installation))
+  })
+
+  // Appearance
+
+  ipcMain.on('set-transparency', (event, transparency: number) => {
+    mainWindow?.setOpacity(transparency)
   })
 
   // Logs API

@@ -1,17 +1,38 @@
 import styled, { createGlobalStyle } from 'styled-components'
 
-import MinecraftWoff from '../../assets/fonts/Minecraft.woff'
-import MinecraftWoff2 from '../../assets/fonts/Minecraft.woff2'
+import MinecraftRegular from '../../assets/fonts/MinecraftRegular.otf'
+import MinecraftItalic from '../../assets/fonts/MinecraftItalic.otf'
+import MinecraftBold from '../../assets/fonts/MinecraftBold.otf'
+import MinecraftBoldItalic from '../../assets/fonts/MinecraftBoldItalic.otf'
 
-// For future use
-// #353535
-// #191621
 
 export const GlobalStyle = createGlobalStyle`
   @font-face {
-    font-family: Minecraft;
-    src: url(${MinecraftWoff2}) format('woff2'),
-    url(${MinecraftWoff}) format('woff');
+    font-family: 'Minecraft';
+    font-weight: normal;
+    font-style: normal;
+    src: url(${ MinecraftRegular }) format("opentype");
+  }
+
+  @font-face {
+    font-family: 'Minecraft';
+    font-weight: normal;
+    font-style: italic;
+    src: url(${ MinecraftItalic }) format("opentype");
+  }
+
+  @font-face {
+    font-family: 'Minecraft';
+    font-weight: bold;
+    font-style: normal;
+    src: url(${ MinecraftBold }) format("opentype");
+  }
+
+  @font-face {
+    font-family: 'Minecraft';
+    font-weight: bold;
+    font-style: italic;
+    src: url(${ MinecraftBoldItalic }) format("opentype");
   }
 
   :root {

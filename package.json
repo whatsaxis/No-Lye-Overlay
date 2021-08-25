@@ -7,6 +7,7 @@
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
+    
     "make": "electron-forge make",
     "dist": "electron-builder --win=portable",
     "release": "electron-forge publish",

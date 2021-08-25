@@ -72,6 +72,12 @@ export const api = {
       return response
   },
 
+  // Appearance
+
+  setTransparency: (transparency: number) => {
+    ipcRenderer.send('set-transparency', transparency)
+  },
+
   /**
    * Provide an easier way to listen to events
    */

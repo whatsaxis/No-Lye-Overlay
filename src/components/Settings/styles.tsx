@@ -32,6 +32,37 @@ export const SettingsStyles = styled.div`
       background-color: #666;
   }
 
+  input[type=range] {
+    width: 45vw;
+    margin: 7.3px 0;
+    background-color: transparent;
+    -webkit-appearance: none;
+  }
+
+  input[type=range]:focus {
+    outline: none;
+  }
+
+  input[type=range]::-webkit-slider-runnable-track {
+    background: #c3c3c3;
+    border: 0.2px solid #010101;
+    border-radius: 1.3px;
+    width: 100%;
+    height: 6px;
+    cursor: pointer;
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    margin-top: -7.5px;
+    width: 12px;
+    height: 20px;
+    background: #ffffff;
+    border: 1.8px solid #00001e;
+    border-radius: 4px;
+    cursor: pointer;
+    -webkit-appearance: none;
+  }
+
   input.blur:not(:focus) {
     filter: blur(4px);
     -webkit-filter: blur(4px);

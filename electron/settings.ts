@@ -10,9 +10,10 @@ export const storageKeys = <const>[
   'username',
   'client',
   'api-key',
+  'transparency'
 ]
 
 export type StorageKey = {
   name: typeof storageKeys[number],
-  value: string
+  value: any
 }
