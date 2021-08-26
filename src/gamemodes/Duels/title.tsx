@@ -13,7 +13,7 @@ interface Title {
 const titles: Title[] = [
     {
         name: 'Rookie',
-        color: 'GRAY',
+        color: 'DARK_GRAY',
         min: 50 * 2,
         increment: 10 * 2,
         bold: false

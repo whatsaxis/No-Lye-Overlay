@@ -99,11 +99,9 @@ export function useUsers() {
     useEffect(() => {
         window.Main.on('server_change', (e: Electron.IpcRendererEvent) => {
             clearUsers()
-            console.log('════════════ Server Change ════════════')
         })
 
         window.Main.on('who', async (e: Electron.IpcRendererEvent, Users: string[]) => {
-            console.log('Used /who')
             const notInUsersArray = Users.filter(u => !users.some((U: Player) => U.username === u))
             for (const u of notInUsersArray) {
                 new Promise(async (resolve, reject) => {
@@ -124,7 +122,6 @@ export function useUsers() {
 
         window.Main.on('leave', (e: Electron.IpcRendererEvent, user: string) => {
             setUsers(u => u.filter(i => i.username !== user))
-            console.log(user + ' left!')
         })
 
         return () => {

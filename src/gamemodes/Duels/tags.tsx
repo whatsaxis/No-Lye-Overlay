@@ -107,8 +107,8 @@ export const columns: { [c: string]: ColumnImplemenetation } = {
   [Column.WLR]: {
     displayName: 'WLR',
     getValue: (player: Player) => {
-      const wins = _(player.stats?.player?.stats?.Bedwars?.wins_bedwars)
-      const losses = player.stats?.player?.stats?.Bedwars?.losses_bedwars
+      const wins = _(player.stats?.player?.stats?.Duels?.wins)
+      const losses = player.stats?.player?.stats?.Duels?.losses
 
       return wins / (losses ? losses : 1)
     },
