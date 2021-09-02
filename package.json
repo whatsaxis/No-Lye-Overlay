@@ -1,0 +1,119 @@
+{
+  "name": "no-lye-overlay",
+  "author": "WhatsAxis",
+  "version": "1.1.1",
+  "description": "A Hypixel stats overlay for the No Lye Guild.",
+  "main": "./app/main.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "build": "webpack --config ./webpack/main.webpack.js && webpack --config ./webpack/renderer.webpack.js",
+    "dev": "npm run build && electron app/main.js",
+    "dist": "npm run build && electron-builder --win=portable",
+    "lint": "eslint . --ext js,ts",
+    "test": "jest"
+  },
+  "keywords": [],
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "@logdna/tail-file": "^2.1.0",
+    "electron-is-dev": "^2.0.0",
+    "electron-store": "^8.0.0",
+    "minecraft-folder-path": "^1.2.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "styled-components": "5.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.14.6",
+    "@babel/plugin-transform-runtime": "7.14.5",
+    "@babel/preset-env": "7.14.5",
+    "@babel/preset-react": "7.14.5",
+    "@babel/preset-typescript": "7.14.5",
+    "@electron-forge/cli": "6.0.0-beta.57",
+    "@electron-forge/maker-deb": "6.0.0-beta.57",
+    "@electron-forge/maker-rpm": "6.0.0-beta.57",
+    "@electron-forge/maker-squirrel": "6.0.0-beta.57",
+    "@electron-forge/maker-zip": "6.0.0-beta.57",
+    "@electron-forge/plugin-webpack": "6.0.0-beta.57",
+    "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
+    "@testing-library/jest-dom": "5.14.1",
+    "@testing-library/react": "11.2.7",
+    "@types/electron-devtools-installer": "2.2.0",
+    "@types/jest": "26.0.23",
+    "@types/react": "17.0.11",
+    "@types/react-dom": "17.0.8",
+    "@types/styled-components": "5.1.10",
+    "@typescript-eslint/eslint-plugin": "4.27.0",
+    "@typescript-eslint/parser": "4.27.0",
+    "babel-loader": "8.2.2",
+    "cross-env": "7.0.3",
+    "electron": "13.1.2",
+    "electron-builder": "^22.11.7",
+    "electron-devtools-installer": "^3.2.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "eslint": "7.29.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-config-standard": "16.0.3",
+    "eslint-plugin-import": "2.23.4",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-prettier": "3.4.0",
+    "eslint-plugin-promise": "5.1.0",
+    "eslint-plugin-react": "7.24.0",
+    "eslint-plugin-standard": "5.0.0",
+    "jest": "27.0.4",
+    "nodemon": "^2.0.12",
+    "npm-run-all": "4.1.5",
+    "prettier": "2.3.1",
+    "react-hot-loader": "4.13.0",
+    "ts-jest": "27.0.3",
+    "typescript": "4.3.4",
+    "url-loader": "^4.1.1",
+    "wait-on": "5.3.0",
+    "webpack-cli": "^4.8.0"
+  },
+  "build": {
+    "productName": "No Lye Overlay",
+    "icon": "assets/icons/icon.ico",
+    "files": [
+      "public",
+      "assets",
+      "app"
+    ],
+    "extraFiles": [
+      "**/public/index.html",
+      "**/assets/**",
+      "**/app/bundle.js",
+      "**/app/bridge.js"
+    ]
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "name": "No-Lye-Overlay",
+        "executableName": "No Lye Overlay",
+        "icon": "assets/icons/icon.ico"
+      },
+      "plugins": [
+        [
+          "@electron-forge/plugin-webpack",
+          {
+            "mainConfig": "./webpack/main.webpack.js",
+            "renderer": {
+              "config": "./webpack/renderer.webpack.js",
+              "entryPoints": [
+                {
+                  "html": "./public/index.html",
+                  "js": "./src/index.tsx",
+                  "name": "public",
+                  "preload": {
+                    "js": "./electron/bridge.ts"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      ]
+    }
+  }
+}
